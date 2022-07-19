@@ -2,22 +2,22 @@
 
 import 'dart:convert';
 
-// part 'user_model.g.dart';
+import 'package:equatable/equatable.dart';
 
-class UserModel {
+class UserModel extends Equatable {
   String userId;
   String name;
   String email;
-  String coverImage;
+  String? coverImage;
   bool isAgreed;
   bool isPrivate;
   bool isBlocked;
   DateTime creationDate;
-  String profileImage;
+  String? profileImage;
   List<String> followers;
   List<String> following;
-  List<String> posts;
-  String discription;
+  String? discription;
+
   UserModel({
     required this.userId,
     required this.name,
@@ -28,11 +28,26 @@ class UserModel {
     required this.creationDate,
     required this.followers,
     required this.following,
-    required this.posts,
     required this.discription,
     required this.profileImage,
     required this.coverImage,
   });
+
+  @override
+  List<Object?> get props => [
+        name,
+        email,
+        userId,
+        coverImage,
+        profileImage,
+        isAgreed,
+        isPrivate,
+        isBlocked,
+        followers,
+        following,
+        discription,
+        creationDate
+      ];
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -44,11 +59,10 @@ class UserModel {
       'isPrivate': isPrivate,
       'isBlocked': isBlocked,
       'creationDate': creationDate.millisecondsSinceEpoch,
+      'profileImage': profileImage,
       'followers': followers,
       'following': following,
-      'posts': posts,
       'discription': discription,
-      'profileImage': profileImage,
     };
   }
 
@@ -57,17 +71,19 @@ class UserModel {
       userId: map['userId'] as String,
       name: map['name'] as String,
       email: map['email'] as String,
-      coverImage: map['coverImage'] as String,
+      coverImage:
+          map['coverImage'] != null ? map['coverImage'] as String : null,
       isAgreed: map['isAgreed'] as bool,
       isPrivate: map['isPrivate'] as bool,
       isBlocked: map['isBlocked'] as bool,
       creationDate:
           DateTime.fromMillisecondsSinceEpoch(map['creationDate'] as int),
-      followers: List<String>.from((map['followers']) as List),
-      following: List<String>.from((map['following']) as List),
-      posts: List<String>.from((map['posts']) as List),
-      discription: map['discription'] as String,
-      profileImage: map['profileImage'] as String,
+      profileImage:
+          map['profileImage'] != null ? map['profileImage'] as String : null,
+      followers: List<String>.from((map['followers']) as List<dynamic>),
+      following: List<String>.from((map['following']) as List<dynamic>),
+      discription:
+          map['discription'] != null ? map['discription'] as String : null,
     );
   }
 
@@ -85,11 +101,10 @@ class UserModel {
     bool? isPrivate,
     bool? isBlocked,
     DateTime? creationDate,
+    String? profileImage,
     List<String>? followers,
     List<String>? following,
-    List<String>? posts,
     String? discription,
-    String? profileImage,
   }) {
     return UserModel(
       userId: userId ?? this.userId,
@@ -100,27 +115,10 @@ class UserModel {
       isPrivate: isPrivate ?? this.isPrivate,
       isBlocked: isBlocked ?? this.isBlocked,
       creationDate: creationDate ?? this.creationDate,
+      profileImage: profileImage ?? this.profileImage,
       followers: followers ?? this.followers,
       following: following ?? this.following,
-      posts: posts ?? this.posts,
       discription: discription ?? this.discription,
-      profileImage: profileImage ?? this.profileImage,
     );
   }
-}
-
-class UmKeys {
-  static const String userId = "userId";
-  static const String name = "name";
-  static const String email = "email";
-  static const String coverImage = "coverImage";
-  static const String isAgreed = "isAgreed";
-  static const String isPrivate = "isPrivate";
-  static const String isBlocked = "isBlocked";
-  static const String creationDate = "creationDate";
-  static const String followers = "followers";
-  static const String following = "following";
-  static const String posts = "posts";
-  static const String discription = "discription";
-  static const String profileImage = "profileImage";
 }

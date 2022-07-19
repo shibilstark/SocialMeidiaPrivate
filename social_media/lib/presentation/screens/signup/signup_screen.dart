@@ -12,11 +12,10 @@ import 'package:social_media/core/controllers/text_controllers.dart';
 
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
+import 'package:social_media/presentation/util/functions/string_functions.dart';
 import 'package:social_media/presentation/widgets/custom_text_field.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
-import 'package:social_media/utility/util.dart';
 import 'package:uuid/uuid.dart';
-import 'package:social_media/utility/functions/string_functions.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -121,7 +120,7 @@ class SignUpActionButtonWidget extends StatelessWidget {
           Fluttertoast.showToast(
               msg: "Account Created Successfully Please Login");
         } else if (state is AuthStateAccountCreateError) {
-          Fluttertoast.showToast(msg: state.err.toString());
+          Fluttertoast.showToast(msg: state.err.error);
         }
       },
       builder: (context, state) {
@@ -148,9 +147,8 @@ class SignUpActionButtonWidget extends StatelessWidget {
                     discription: profileDiscriptionAuto,
                     followers: [],
                     following: [],
-                    posts: [],
-                    profileImage: "",
-                    coverImage: "",
+                    profileImage: null,
+                    coverImage: null,
                   );
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     context.read<AuthBloc>().add(CreateAccount(

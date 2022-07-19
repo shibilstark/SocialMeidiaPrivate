@@ -44,19 +44,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     });
 
-    // on<LoggedOut>((event, emit) async {
-    //   emit(AuthStateLoading());
+    on<LoggedOut>((event, emit) async {
+      emit(AuthStateLoading());
 
-    //   final response = await _accountServices.logOut();
+      final response = await _accountServices.logOut();
 
-    //   response.fold(
-    //     (success) {
-    //       emit(AuthStateLogginSuccess(success));
-    //     },
-    //     (failure) {
-    //       emit(AuthStateLogginError(failure));
-    //     },
-    //   );
-    // });
+      response.fold(
+        (success) {
+          emit(AuthStateLogginSuccess(success));
+        },
+        (failure) {
+          emit(AuthStateLogginError(failure));
+        },
+      );
+    });
   }
 }

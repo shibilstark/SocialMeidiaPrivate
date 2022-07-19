@@ -8,13 +8,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:social_media/application/auth/auth_bloc.dart';
+import 'package:social_media/application/profile/profile_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/core/controllers/text_controllers.dart';
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/presentation/widgets/custom_text_field.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
-import 'package:social_media/utility/util.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -62,7 +62,7 @@ class LoginBody extends StatelessWidget {
                     Gap(
                       H: 20.sm,
                     ),
-                    NotAmemberWidget(),
+                    const NotAmemberWidget(),
                   ],
                 ),
               ),
@@ -95,12 +95,13 @@ class LoginActionButtonWidget extends StatelessWidget {
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthStateLogginSuccess) {
-            log("AuthStateLogginSuccess");
-            Navigator.of(context).pushReplacementNamed("/home");
-            Fluttertoast.showToast(msg: "Loging in");
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Fluttertoast.showToast(msg: "Logging in");
+              context.read<ProfileBloc>().add(GetCurrentUser());
+              Navigator.of(context).pushReplacementNamed("/home");
+            });
           } else if (state is AuthStateLogginError) {
-            log("AuthStateLogginError");
-            Fluttertoast.showToast(msg: state.error.toString());
+            Fluttertoast.showToast(msg: state.error.error);
           }
         },
         builder: (context, state) {

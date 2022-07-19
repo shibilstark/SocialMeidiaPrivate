@@ -1,15 +1,20 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:social_media/application/user/current_user/current_user_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:social_media/application/auth/auth_bloc.dart';
+import 'package:social_media/application/profile/profile_bloc.dart';
+import 'package:social_media/application/theme/theme_bloc.dart';
+
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/domain/global/global_variables.dart';
-import 'package:social_media/presentation/routes/app_router.dart';
-import 'package:social_media/presentation/screens/profile/widgets/profile_part/user_profile_part.dart';
+import 'package:social_media/domain/models/user_model/user_model.dart';
+import 'package:social_media/presentation/router/router.dart';
 import 'package:social_media/presentation/shimmers/profile_part_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
-import 'package:social_media/presentation/widgets/theme_change_switch.dart';
+import '../../../core/constants/enums.dart';
 
 class EndDrawer extends StatelessWidget {
   const EndDrawer({Key? key}) : super(key: key);
@@ -25,61 +30,108 @@ class EndDrawer extends StatelessWidget {
         child: Drawer(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const EndDrawerMiniProfile(),
-                  Container(
-                    padding: EdgeInsets.all(20.sm),
-                    child: Column(
-                      children: const [
-                        ThemChangeSwitch(),
-                        Divider(),
-                        MenuTiles(
-                          icon: Icons.settings,
-                          title: "Settings",
-                          whereTo: Scaffold(),
-                        ),
-                        Divider(),
-                        MenuTiles(
-                          icon: Icons.privacy_tip,
-                          title: "Privacy Policy",
-                          whereTo: Scaffold(),
-                        ),
-                        Divider(),
-                        MenuTiles(
-                          icon: Icons.gavel,
-                          title: "Terms % Conditions",
-                          whereTo: Scaffold(),
-                        ),
-                        Divider(),
-                        MenuTiles(
-                          icon: Icons.info,
-                          title: "About",
-                          whereTo: Scaffold(),
-                        ),
-                        Divider(),
-                        MenuTiles(
-                          icon: Icons.redeem,
-                          title: "Invite a Friend",
-                          whereTo: Scaffold(),
-                        ),
-                        Divider(),
-                        MenuTiles(
-                          icon: Icons.spoke,
-                          title: "Connect with us",
-                          whereTo: Scaffold(),
-                        ),
-                        Divider(),
-                        LogOutTile(),
-                        Divider(
-                          color: primary,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+            child: Column(
+              children: [
+                const EndDrawerMiniProfile(),
+                Container(
+                  padding: EdgeInsets.all(20.sm),
+                  child: Column(
+                    children: [
+                      BlocBuilder<ThemeBloc, ThemeState>(
+                        builder: (context, state) {
+                          return SizedBox(
+                            height: 35.sm,
+                            child: Row(
+                              children: [
+                                IconTheme(
+                                    data: Theme.of(context).iconTheme,
+                                    child: Icon(
+                                      state.isDark
+                                          ? Icons.light_mode
+                                          : Icons.dark_mode,
+                                      size: 20,
+                                    )),
+                                Gap(
+                                  W: 10.sm,
+                                ),
+                                Text(
+                                  state.isDark
+                                      ? "Back to Light"
+                                      : "Switch to Dark",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(
+                                          fontSize: 18.sm,
+                                          fontWeight: FontWeight.w400),
+                                ),
+                                const Spacer(),
+                                Builder(builder: (context) {
+                                  bool sValue = state.isDark ? true : false;
+                                  return Switch(
+                                      value: sValue,
+                                      onChanged: (value) async {
+                                        if (value) {
+                                          BlocProvider.of<ThemeBloc>(context)
+                                              .add(ChangeTheme(
+                                                  changeTo: MyThemeMode.dark));
+                                        } else {
+                                          BlocProvider.of<ThemeBloc>(context)
+                                              .add(ChangeTheme(
+                                                  changeTo: MyThemeMode.light));
+                                        }
+                                      });
+                                }),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      const Divider(),
+                      const MenuTiles(
+                        icon: Icons.settings,
+                        title: "Settings",
+                        whereTo: Scaffold(),
+                      ),
+                      const Divider(),
+                      const MenuTiles(
+                        icon: Icons.privacy_tip,
+                        title: "Privacy Policy",
+                        whereTo: Scaffold(),
+                      ),
+                      const Divider(),
+                      const MenuTiles(
+                        icon: Icons.gavel,
+                        title: "Terms % Conditions",
+                        whereTo: Scaffold(),
+                      ),
+                      const Divider(),
+                      const MenuTiles(
+                        icon: Icons.info,
+                        title: "About",
+                        whereTo: Scaffold(),
+                      ),
+                      const Divider(),
+                      const MenuTiles(
+                        icon: Icons.redeem,
+                        title: "Invite a Friend",
+                        whereTo: Scaffold(),
+                      ),
+                      const Divider(),
+                      const MenuTiles(
+                        icon: Icons.spoke,
+                        title: "Connect with us",
+                        whereTo: Scaffold(),
+                      ),
+                      const Divider(),
+                      const LogOutTile(),
+                      const Divider(
+                        color: primary,
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
         ),
@@ -97,86 +149,121 @@ class EndDrawerMiniProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Navigator.of(context).popAndPushNamed("/profile",
-              arguments: ScreenArgs(args: {"userId": Global.USER_DATA.id}));
+          Navigator.of(context).popAndPushNamed("/profile");
         },
         child: Container(
             padding: EdgeInsets.all(20.sm),
             color: primaryBlue,
-            child: BlocConsumer<CurrentUserBloc, CurrentUserState>(
-              listener: (context, state) {},
-              builder: (context, state) {
-                if (state is FetchCurrentUserError) {
-                  return Container(
-                    height: 100.sm,
-                    child: Center(child: Text("OOPS")),
-                  );
-                } else if (state is FetchCurrentUserSuccess) {
-                  final user = state.data.user;
-                  final profile = user.profileImage;
-                  final email = user.email;
-
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      profile == "" || profile.isEmpty
-                          ? CircleAvatar(
-                              radius: 25.sm,
-                              backgroundColor: secondaryBlue,
-                              backgroundImage: AssetImage(dummyProfilePicture),
-                            )
-                          : CircleAvatar(
-                              radius: 25.sm,
-                              backgroundColor: secondaryBlue,
-                              backgroundImage: NetworkImage(profile),
-                            ),
-                      Gap(
-                        W: 10.sm,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
+            child: Container(
+                height: 50.sm,
+                child: BlocConsumer<ProfileBloc, ProfileState>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    if (state is ProfileError) {
+                      return Row(
                         children: [
-                          Text(
-                            // user == null ? "" : user.name,
-                            user.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                    fontSize: 17.sm,
-                                    fontWeight: FontWeight.w500,
-                                    color: pureWhite),
+                          SvgPicture.asset(
+                            "assets/svg/404.svg",
+                            height: 50.sm,
                           ),
-                          Gap(
-                            H: 3.sm,
-                          ),
-                          Text(
-                            // user == null ? "" : user.email,
-                            email,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                  color: pureWhite.withOpacity(0.7),
-                                  fontSize: 12.sm,
-                                  fontWeight: FontWeight.w500,
+                          Gap(W: 20.sm),
+                          Expanded(
+                              child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3.sm)),
+                            onPressed: () {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                context
+                                    .read<ProfileBloc>()
+                                    .add(GetCurrentUser());
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Reload",
+                                  style: TextStyle(
+                                      color: pureWhite,
+                                      fontSize: 15.sm,
+                                      fontWeight: FontWeight.normal),
                                 ),
+                                Gap(W: 10.sm),
+                                Icon(
+                                  Icons.replay,
+                                  size: 20.sm,
+                                  color: smoothWhite,
+                                ),
+                              ],
+                            ),
+                          ))
+                        ],
+                      );
+                    }
+                    if (state is ProfileLoading) {
+                      return const ProfilePartLoading();
+                    }
+
+                    final user = (state as ProfileSuccess).profileModel.user;
+
+                    return Row(children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          user.profileImage == null
+                              ? CircleAvatar(
+                                  radius: 25.sm,
+                                  backgroundColor: secondaryBlue,
+                                  backgroundImage: const AssetImage(
+                                      "assets/dummy/dummyDP.png"),
+                                )
+                              : CircleAvatar(
+                                  radius: 25.sm,
+                                  backgroundColor: secondaryBlue,
+                                  backgroundImage:
+                                      NetworkImage(user.profileImage!),
+                                ),
+                          Gap(
+                            W: 10.sm,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                // user == null ? "" : user.name,
+                                user.name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                        fontSize: 17.sm,
+                                        fontWeight: FontWeight.w500,
+                                        color: pureWhite),
+                              ),
+                              Gap(
+                                H: 3.sm,
+                              ),
+                              Text(
+                                // user == null ? "" : user.email,
+                                user.email,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color: pureWhite.withOpacity(0.7),
+                                      fontSize: 12.sm,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  );
-                } else {
-                  return ProfilePartLoading();
-                }
-              },
-            )));
+                    ]);
+                  },
+                ))));
   }
-  // ),
-  //     ),
-  //   );
-  // }
 }
 
 class LogOutTile extends StatelessWidget {
@@ -189,7 +276,12 @@ class LogOutTile extends StatelessWidget {
     return Builder(
       builder: (context) {
         return GestureDetector(
-            onTap: () async {},
+            onTap: () async {
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                context.read<AuthBloc>().add(LoggedOut());
+                Navigator.of(context).pushReplacementNamed('/login');
+              });
+            },
             child: SizedBox(
               height: 35.sm,
               child: Row(

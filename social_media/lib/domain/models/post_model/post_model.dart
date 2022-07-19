@@ -1,22 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
+import 'package:equatable/equatable.dart';
 import 'package:social_media/domain/models/comment/comment_model.dart';
 import 'package:social_media/domain/models/post_report_model/reports_model.dart';
 
-class PostModel {
-  final String postId;
-  final String userId;
-  final String post;
-  final DateTime createdAt;
-  final DateTime laseEdit;
-  final List<PostComment> comments;
-  final List<String> lights;
-  final String type;
-  final String? videoThumbnail;
-  final String? discription;
-  final String? tag;
-  final List<ReportsModel> reports;
+class PostModel extends Equatable {
+  String postId;
+  String userId;
+  String post;
+  DateTime createdAt;
+  DateTime laseEdit;
+  List<PostComment> comments;
+  List<String> lights;
+  String type;
+  String? videoThumbnail;
+  String discription;
+  String tag;
+  List<ReportsModel> reports;
 
   PostModel({
     required this.postId,
@@ -58,20 +58,17 @@ class PostModel {
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       laseEdit: DateTime.fromMillisecondsSinceEpoch(map['laseEdit'] as int),
       comments: List<PostComment>.from(
-        (map['comments'] as List<dynamic>).map<PostComment>(
+        (map['comments'] as List<int>).map<PostComment>(
           (x) => PostComment.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      lights: List<String>.from((map['lights']) as List<dynamic>),
+      lights: List<String>.from((map['lights']) as List<String>),
       type: map['type'] as String,
-      videoThumbnail: map['videoThumbnail'] != null
-          ? map['videoThumbnail'] as String
-          : null,
-      discription:
-          map['discription'] != null ? map['discription'] as String : null,
-      tag: map['tag'] != null ? map['tag'] as String : null,
+      videoThumbnail: map['videoThumbnail'] as String,
+      discription: map['discription'] as String,
+      tag: map['tag'] as String,
       reports: List<ReportsModel>.from(
-        (map['reports'] as List<dynamic>).map<ReportsModel>(
+        (map['reports'] as List<int>).map<ReportsModel>(
           (x) => ReportsModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -112,6 +109,22 @@ class PostModel {
       reports: reports ?? this.reports,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        post,
+        postId,
+        userId,
+        createdAt,
+        laseEdit,
+        comments,
+        lights,
+        type,
+        videoThumbnail,
+        discription,
+        tag,
+        reports
+      ];
 }
 
 class PostType {

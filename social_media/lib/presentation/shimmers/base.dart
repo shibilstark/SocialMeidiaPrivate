@@ -19,13 +19,15 @@ class ShimmerBasicRectangleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: shimmerBaseColor,
-      highlightColor: shimmerHighlightColor,
+      baseColor: Theme.of(context).canvasColor,
+      highlightColor: Theme.of(context).canvasColor,
       child: Container(
         height: H,
         width: W,
         decoration: BoxDecoration(
-            color: primary, borderRadius: BorderRadius.circular(rad)),
+            border: Border.all(width: 0, color: Colors.transparent),
+            color: softGrey,
+            borderRadius: BorderRadius.circular(rad)),
       ),
     );
   }
@@ -40,8 +42,8 @@ class ShimmerBaseCircleWIdget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: shimmerBaseColor,
-      highlightColor: shimmerHighlightColor,
+      baseColor: Theme.of(context).canvasColor,
+      highlightColor: Theme.of(context).canvasColor,
       child: CircleAvatar(
         radius: rad,
       ),

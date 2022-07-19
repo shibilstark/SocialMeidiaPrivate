@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media/core/colors/colors.dart';
-import 'package:social_media/utility/functions/string_functions.dart';
-import 'package:social_media/utility/functions/string_functions.dart';
-import 'package:social_media/utility/functions/string_functions.dart';
+import 'package:social_media/presentation/util/functions/string_functions.dart';
 
 class CustomTextField extends StatelessWidget {
   CustomTextField({

@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "331676438080",
-    "project_id": "socialmedia-80541",
-    "storage_bucket": "socialmedia-80541.appspot.com"
+    "project_number": "1067222765689",
+    "project_id": "mythic-benefit-355605",
+    "storage_bucket": "mythic-benefit-355605.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:331676438080:android:5073b261d4c732b580d9a5",
+        "mobilesdk_app_id": "1:1067222765689:android:82788f25d166f46f9504a8",
         "android_client_info": {
           "package_name": "com.devstark.socialmedia"
         }
       },
       "oauth_client": [
         {
-          "client_id": "331676438080-frgeoqcc158ms9ciojk5bhkvslr2d6a2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.devstark.socialmedia",
-            "certificate_hash": "9c1b589d57c08a320c77a6a409d107fe37b1d52c"
-          }
-        },
-        {
-          "client_id": "331676438080-31oqt5i57jcqe90g29bd926u6mv3o0os.apps.googleusercontent.com",
+          "client_id": "1067222765689-gkka3odnu7m8p9kfbtkdvu56pkss4epv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCb3iIfH4oQHenfNFxaKZ_VZYkXMMJrf74"
+          "current_key": "AIzaSyCgR2XlOet8Dv5zHuqcbawkFdm3z1iEsHA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "331676438080-31oqt5i57jcqe90g29bd926u6mv3o0os.apps.googleusercontent.com",
+              "client_id": "1067222765689-gkka3odnu7m8p9kfbtkdvu56pkss4epv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

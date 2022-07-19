@@ -7,14 +7,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:social_media/application/auth/auth_bloc.dart';
+import 'package:social_media/application/edit_profile_pics/edit_profile_bloc.dart';
+import 'package:social_media/application/profile/profile_bloc.dart';
 import 'package:social_media/application/theme/theme_bloc.dart';
-import 'package:social_media/application/user/current_user/current_user_bloc.dart';
-
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/domain/db/user_data/user_data.dart';
 import 'package:social_media/domain/injectable/injectable.dart';
-import 'package:social_media/presentation/routes/app_router.dart';
+import 'package:social_media/presentation/router/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +40,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  MyApp({Key? key}) : super(key: key);
   final _appRouter = AppRouter();
 
   @override
@@ -53,7 +54,10 @@ class MyApp extends StatelessWidget {
           create: (context) => getIt<AuthBloc>(),
         ),
         BlocProvider(
-          create: (context) => getIt<CurrentUserBloc>(),
+          create: (context) => getIt<ProfileBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<EditProfileBloc>(),
         ),
       ],
       child: ScreenUtilInit(

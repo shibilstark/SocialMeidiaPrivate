@@ -2,13 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/presentation/screens/home/end_drawer.dart';
-import 'package:social_media/presentation/screens/new_post_screen/new_post_sheet.dart';
-import 'package:social_media/presentation/screens/post/post_screen.dart';
+import 'package:social_media/presentation/screens/profile/edit/edit_cover_picture.dart';
 
 import 'package:social_media/presentation/widgets/gap.dart';
 
@@ -19,8 +19,6 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({
     Key? key,
   }) : super(key: key);
-
-  // final UserModel model;
 
   final _homeScaffold = GlobalKey<ScaffoldState>(debugLabel: "homeScaffold");
   openDrawer() {
@@ -112,7 +110,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 final _screens = [
-  PostScreen(),
+  Scaffold(),
   Scaffold(),
   Scaffold(),
   Scaffold(),
@@ -171,12 +169,20 @@ class MainAppBar extends StatelessWidget {
             style:
                 Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 23)),
         actions: [
-          Gap(W: 30.sm),
+          // Gap(W: 40.sm),
+          // SizedBox(
+          //   height: 20.sm,
+          //   width: 20,
+          //   child: Lottie.asset("assets/lottie/60041-upload.json"),
+          // ),
+          // Gap(W: 15.sm),
           IconButton(
             icon: Icon(Icons.add_photo_alternate),
-            onPressed: () => openNewPostSheet(context: context),
+            onPressed: () {
+              // showEditCoverPictureBottomSheet(context: context);
+            },
           ),
-          Gap(W: 15.sm),
+          Gap(W: 20.sm),
         ],
       ),
     );

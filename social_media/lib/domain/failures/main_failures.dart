@@ -18,8 +18,7 @@ enum MyAppFilures {
   firebaseFailure,
   userNotFound,
   emailOrPasswordFailure,
-  none,
-  networkFailure,
+  none
 }
 
 class MainFailures extends Equatable {
@@ -53,13 +52,6 @@ class FirebaseFailure extends MainFailures implements Exception {
 
   @override
   List<Object?> get props => [err];
-}
-
-class NetworkFailure extends MainFailures implements Exception {
-  NetworkFailure()
-      : super(
-            error: "Check Your Network Connection",
-            failureType: MyAppFilures.networkFailure);
 }
 
 class UserNotFound extends MainFailures implements Exception {
