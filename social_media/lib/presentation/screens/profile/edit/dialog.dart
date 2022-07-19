@@ -41,6 +41,13 @@ class ProfileLoadingDialog extends StatelessWidget {
               Navigator.of(context).pop();
               Fluttertoast.showToast(msg: state.failure.error);
             }
+            if (state is NAmeAndDiscChangeSuccess) {
+              Navigator.of(context).pop();
+            }
+            if (state is NAmeAndDiscChangeError) {
+              Navigator.of(context).pop();
+              Fluttertoast.showToast(msg: state.failure.error);
+            }
 
             return WillPopScope(
               onWillPop: () async => false,

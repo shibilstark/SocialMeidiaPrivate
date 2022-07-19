@@ -11,6 +11,7 @@ import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/domain/models/post_model/post_model.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/presentation/screens/profile/edit/edit_cover_picture.dart';
+import 'package:social_media/presentation/screens/profile/edit/edit_name_discr.dart';
 import 'package:social_media/presentation/screens/profile/edit/edit_profile_picture.dart';
 import 'package:social_media/presentation/shimmers/inner_profile_shimmer.dart';
 import 'package:social_media/presentation/shimmers/profile_part_shimmer.dart';
@@ -51,23 +52,20 @@ class ProfileInfo extends StatelessWidget {
                                   color: Theme.of(context).canvasColor,
                                   width: double.infinity,
                                 )
-                              : Container(
-                                  width: double.infinity,
-                                  constraints:
-                                      BoxConstraints(maxHeight: 150.sm),
-                                  child:
-                                      // Image.network(
-                                      //   user.coverImage!,
-
-                                      //   fit: BoxFit.cover,
-                                      // ),
-                                      FadeInImage(
-                                          fadeInDuration:
-                                              Duration(milliseconds: 100),
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(user.coverImage!),
-                                          placeholder:
-                                              AssetImage(dummyProfilePicture)),
+                              : GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                    width: double.infinity,
+                                    constraints:
+                                        BoxConstraints(maxHeight: 150.sm),
+                                    child: FadeInImage(
+                                        fadeInDuration:
+                                            Duration(milliseconds: 100),
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(user.coverImage!),
+                                        placeholder:
+                                            AssetImage(dummyProfilePicture)),
+                                  ),
                                 ),
                           Padding(
                             padding: EdgeInsets.all(7.sm),
@@ -186,12 +184,19 @@ class ProfileInfo extends StatelessWidget {
                           padding: EdgeInsets.only(left: 10.sm),
                           child: Row(
                             children: [
-                              Text(
-                                user.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(fontSize: 18.sm),
+                              BlocBuilder<EditProfileBloc, EditProfileState>(
+                                builder: (context, state) {
+                                  if (state is NAmeAndDiscChangeSuccess) {
+                                    user.name = state.obj.name;
+                                  }
+                                  return Text(
+                                    user.name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(fontSize: 18.sm),
+                                  );
+                                },
                               ),
                               Gap(W: 15.sm),
                               CircleAvatar(
@@ -204,7 +209,9 @@ class ProfileInfo extends StatelessWidget {
                                     Icons.edit,
                                     size: 10.sm,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showEditNameAndDiscSheet(context);
+                                  },
                                 ),
                               ),
                             ],
@@ -229,13 +236,21 @@ class ProfileInfo extends StatelessWidget {
                             children: [
                               Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text(
-                                  user.discription!,
-                                  // maxLines: 3,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(fontSize: 15.sm),
+                                child: BlocBuilder<EditProfileBloc,
+                                    EditProfileState>(
+                                  builder: (context, state) {
+                                    if (state is NAmeAndDiscChangeSuccess) {
+                                      user.discription = state.obj.disc;
+                                    }
+                                    return Text(
+                                      user.discription!,
+                                      // maxLines: 3,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(fontSize: 15.sm),
+                                    );
+                                  },
                                 ),
                               ),
                             ],

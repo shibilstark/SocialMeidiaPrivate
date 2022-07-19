@@ -16,3 +16,8 @@ class ChangeProfilePic extends EditProfileEvent {
   final String? newPic;
   ChangeProfilePic(this.newPic);
 }
+
+class ChangeNameAndDisc extends EditProfileEvent {
+  final NameAndDisc obj;
+  ChangeNameAndDisc(this.obj);
+}

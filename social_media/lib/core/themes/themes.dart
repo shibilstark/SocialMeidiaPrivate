@@ -4,6 +4,7 @@ import 'package:social_media/core/colors/colors.dart';
 
 class MyTheme {
   static ThemeData lightTheme = ThemeData(
+      splashColor: softBlack,
       canvasColor: shimmerLight,
       dividerColor: primaryBlue,
       dialogTheme: const DialogTheme(backgroundColor: primaryBlue),
@@ -48,6 +49,7 @@ class MyTheme {
       bottomNavigationBarTheme:
           const BottomNavigationBarThemeData(backgroundColor: primaryBlue));
   static ThemeData darkTheme = ThemeData(
+    splashColor: smoothWhite,
     dividerColor: softGrey,
     canvasColor: shimmerDark,
     dialogTheme: const DialogTheme(backgroundColor: darkBg),

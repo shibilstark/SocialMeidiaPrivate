@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import 'package:social_media/domain/failures/main_failures.dart';
+import 'package:social_media/domain/models/local_models/name_and_disc.dart';
 import 'package:social_media/infrastructure/profile/profile_repo.dart';
 import 'package:social_media/infrastructure/profile/profile_services.dart';
 
@@ -38,6 +39,21 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         },
         (failure) {
           return ProfilePicChangeError(failure);
+        },
+      );
+
+      emit(newState);
+    });
+    on<ChangeNameAndDisc>((event, emit) async {
+      emit(ProfileShowLoadingDialogue());
+      final response = await _profile_repo.changeNameAndDisc(obj: event.obj);
+
+      final newState = response.fold(
+        (success) {
+          return NAmeAndDiscChangeSuccess(success);
+        },
+        (failure) {
+          return NAmeAndDiscChangeError(failure);
         },
       );
 

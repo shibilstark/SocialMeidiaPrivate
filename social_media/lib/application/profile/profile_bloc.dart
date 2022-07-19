@@ -11,23 +11,30 @@ import 'package:social_media/infrastructure/profile/profile_services.dart';
 part 'profile_event.dart';
 part 'profile_state.dart';
 
+ProfileState? _newState;
+
 @injectable
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ProfileRepo _profile_repo;
+
   ProfileBloc(this._profile_repo) : super(ProfileInitial()) {
     on<GetCurrentUser>((event, emit) async {
-      emit(ProfileLoading());
+      if (_newState == null) {
+        emit(ProfileLoading());
+      }
 
       final response = await _profile_repo.getCurrentUser();
 
-      final newState = response.fold(
+      _newState = response.fold(
         (success) {
-          return emit(ProfileSuccess(success));
+          return ProfileSuccess(success);
         },
         (failure) {
-          return emit(ProfileError(failure));
+          return ProfileError(failure);
         },
       );
+
+      emit(_newState!);
     });
   }
 }

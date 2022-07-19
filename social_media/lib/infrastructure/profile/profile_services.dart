@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:social_media/core/collections/firebase_collections.dart';
 import 'package:social_media/core/functions/fb.dart';
 import 'package:social_media/domain/global/global_variables.dart';
+import 'package:social_media/domain/models/local_models/name_and_disc.dart';
 import 'package:social_media/domain/models/post_model/post_model.dart';
 import 'package:social_media/domain/models/profile_model/profile_model.dart';
 import 'package:social_media/domain/failures/main_failures.dart';
@@ -102,7 +103,7 @@ class ProfileServices implements ProfileRepo {
           .doc(Global.USER_DATA.id);
 
       if (newPic == null) {
-        userData.update({'profileImage': null});
+        await userData.update({'profileImage': null});
 
         return Left(null);
       } else {
@@ -117,10 +118,34 @@ class ProfileServices implements ProfileRepo {
 
         final imageUrl = await snapShot.ref.getDownloadURL();
 
-        userData.update({'profileImage': imageUrl});
+        await userData.update({'profileImage': imageUrl});
 
         return Left(imageUrl);
       }
+    } on FirebaseException catch (e) {
+      log(e.toString());
+
+      return Right(MainFailures(
+          error: firebaseCodeFix(e.code),
+          failureType: MyAppFilures.firebaseFailure));
+    } catch (e) {
+      log(e.toString());
+      return Right(MainFailures(
+          error: e.toString(), failureType: MyAppFilures.clientFailure));
+    }
+  }
+
+  @override
+  Future<Either<NameAndDisc, MainFailures>> changeNameAndDisc(
+      {required NameAndDisc obj}) async {
+    try {
+      final userData = await FirebaseFirestore.instance
+          .collection(Collections.users)
+          .doc(Global.USER_DATA.id);
+
+      await userData.update({'name': obj.name, 'discription': obj.disc});
+
+      return Left(obj);
     } on FirebaseException catch (e) {
       log(e.toString());
 

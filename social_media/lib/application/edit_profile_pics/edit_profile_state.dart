@@ -32,3 +32,15 @@ class CoverPicChangeError extends EditProfileState {
   MainFailures failure;
   CoverPicChangeError(this.failure);
 }
+
+// Change Name And Disc
+
+class NAmeAndDiscChangeSuccess extends EditProfileState {
+  NameAndDisc obj;
+  NAmeAndDiscChangeSuccess(this.obj);
+}
+
+class NAmeAndDiscChangeError extends EditProfileState {
+  MainFailures failure;
+  NAmeAndDiscChangeError(this.failure);
+}
