@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,8 +10,10 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:social_media/application/auth/auth_bloc.dart';
 import 'package:social_media/application/edit_profile_pics/edit_profile_bloc.dart';
+import 'package:social_media/application/post_crud/post_crud_bloc.dart';
 import 'package:social_media/application/profile/profile_bloc.dart';
 import 'package:social_media/application/theme/theme_bloc.dart';
+import 'package:social_media/application/upload_post/upload_post_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/domain/db/user_data/user_data.dart';
@@ -21,22 +25,22 @@ void main() async {
 
   final storage = await HydratedStorage.build(
       storageDirectory: await getApplicationDocumentsDirectory());
-
-  await Firebase.initializeApp();
-  await Hive.initFlutter();
   await configureInjection();
+  await Hive.initFlutter();
+  await Firebase.initializeApp();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: softBlack,
   ));
-
   if (!Hive.isAdapterRegistered(UserDataAdapter().typeId)) {
     Hive.registerAdapter(UserDataAdapter());
   }
-
   HydratedBlocOverrides.runZoned(
     () => runApp(MyApp()),
     storage: storage,
   );
+  // String str = "hello";
+  // str.split("")[0] = "1";
+  // log(str);
 }
 
 class MyApp extends StatelessWidget {
@@ -58,6 +62,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<EditProfileBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => UploadPostBloc(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<PostCrudBloc>(),
         ),
       ],
       child: ScreenUtilInit(

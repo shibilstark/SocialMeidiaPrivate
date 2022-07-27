@@ -3,6 +3,19 @@ import 'package:flutter/material.dart';
 class PostTextFieldControllers {
   static final TextEditingController discription = TextEditingController();
   static final TextEditingController tag = TextEditingController();
+
+  static clearControllers() {
+    discription.clear();
+    tag.clear();
+  }
+}
+
+class TextFielsPostEditControllers {
+  static final TextEditingController postDiscription = TextEditingController();
+
+  static clearControllers() {
+    postDiscription.clear();
+  }
 }
 
 class TextFieldAuthenticationController {
@@ -18,4 +31,13 @@ class TextFieldAuthenticationController {
 class EditProfileTextEditingControllers {
   static final TextEditingController name = TextEditingController();
   static final TextEditingController discription = TextEditingController();
+}
+
+class NewPostTextEditControllers {
+  static final TextEditingController tag = TextEditingController();
+  static final TextEditingController discription = TextEditingController();
+  static clearControllers() {
+    discription.clear();
+    tag.clear();
+  }
 }

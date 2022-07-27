@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_media/application/edit_profile_pics/edit_profile_bloc.dart';
+import 'package:social_media/application/post_crud/post_crud_bloc.dart';
 import 'package:social_media/application/profile/profile_bloc.dart';
 
 import 'package:social_media/core/colors/colors.dart';
@@ -11,6 +12,7 @@ import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/presentation/screens/profile/edit/dialog.dart';
 import 'package:social_media/presentation/screens/profile/widgets/profile_info.dart';
+import 'package:social_media/presentation/screens/profile/widgets/user_post.dart';
 import 'package:social_media/presentation/shimmers/inner_profile_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 
@@ -25,13 +27,23 @@ class ProfileScreen extends StatelessWidget {
       appBar:
           PreferredSize(child: ProfileAppBar(), preferredSize: appBarHeight),
       body: SafeArea(
-          child: BlocListener<EditProfileBloc, EditProfileState>(
+          child: BlocConsumer<PostCrudBloc, PostCrudState>(
         listener: (context, state) {
-          if (state is ProfileShowLoadingDialogue) {
+          if (state is DeletePostProcessing ||
+              state is EditPostDiscProcessing) {
             showProfileEditLodingDialog(context);
           }
         },
-        child: ProfileBody(),
+        builder: (context, state) {
+          return BlocListener<EditProfileBloc, EditProfileState>(
+            listener: (context, state) {
+              if (state is ProfileShowLoadingDialogue) {
+                showProfileEditLodingDialog(context);
+              }
+            },
+            child: ProfileBody(),
+          );
+        },
       )),
     );
   }
@@ -66,7 +78,7 @@ class ProfileAppBar extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                // showNewPostBottomSheet(context: context);
+                Navigator.of(context).pushNamed('/newpost');
               },
               icon: Icon(Icons.add_photo_alternate)),
           IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
@@ -124,78 +136,53 @@ class ProfileBody extends StatelessWidget {
                 ),
               ),
             );
-          } else if (state is ProfileLoading) {
-            return InnerProfileLoading();
+          } else if (state is ProfileSuccess) {
+            return RefreshIndicator(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              color: primaryBlue,
+              onRefresh: () async {
+                return WidgetsBinding.instance.addPostFrameCallback((_) {
+                  context.read<ProfileBloc>().add(GetCurrentUser());
+                });
+              },
+              child: ListView(
+                children: [
+                  ProfileInfo(),
+                  Gap(H: 30.sm),
+                  Text("Posts",
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: 20.sm, fontWeight: FontWeight.bold)),
+                  Divider(
+                    thickness: 0.1,
+                  ),
+                  Gap(H: 10.sm),
+                  BlocBuilder<PostCrudBloc, PostCrudState>(
+                    builder: (context, deleteState) {
+                      if (deleteState is DeletePostSuccess) {
+                        state.profileModel.posts.removeWhere((element) {
+                          return element.postId.contains(deleteState.id);
+                        });
+                      }
+                      return ListView.separated(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => UserPost(
+                              postId: ValueKey(
+                                  state.profileModel.posts[index].postId),
+                              profileModel: state.profileModel,
+                              index: index),
+                          separatorBuilder: (context, index) =>
+                              Divider(thickness: 0.4),
+                          itemCount: state.profileModel.posts.length);
+                    },
+                  )
+                ],
+              ),
+            );
           }
-
-          return RefreshIndicator(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            color: primaryBlue,
-            onRefresh: () async {
-              return WidgetsBinding.instance.addPostFrameCallback((_) {
-                context.read<ProfileBloc>().add(GetCurrentUser());
-              });
-            },
-            child: ListView(
-              children: [
-                ProfileInfo(),
-                Gap(H: 20.sm),
-                Divider(),
-              ],
-            ),
-          );
+          return InnerProfileLoading();
         },
       ),
     );
   }
 }
-
-// InnerProfilePart(),
-//               Gap(
-//                 H: 20.sm,
-//               ),
-//               Padding(
-//                 padding: EdgeInsets.symmetric(),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text(
-//                       "POSTS",
-//                       style: Theme.of(context)
-//                           .textTheme
-//                           .titleMedium!
-//                           .copyWith(fontSize: 18),
-//                     ),
-//                     Divider(),
-//                     state is GetUserSuccess
-//                         ? ProfilePostsSection()
-//                         : state is GetUserError
-//                             ? Column(children: [
-//                                 SvgPicture.asset(
-//                                   "assets/svg/404.svg",
-//                                   width: 300.sm,
-//                                 ),
-//                                 Gap(H: 10.sm),
-//                                 MaterialButton(
-//                                     shape: RoundedRectangleBorder(
-//                                         borderRadius:
-//                                             BorderRadius.circular(3.sm)),
-//                                     onPressed: () {
-//                                       WidgetsBinding.instance
-//                                           .addPostFrameCallback((_) {
-//                                         context
-//                                             .read<ProfileBloc>()
-//                                             .add(GetUser());
-//                                       });
-//                                     })
-//                               ])
-//                             : Center(
-//                                 child: CircularProgressIndicator(
-//                                     color: Theme.of(context)
-//                                         .textTheme
-//                                         .bodyMedium!
-//                                         .color),
-//                               ),
-//                   ],
-//                 ),
-//               )

@@ -8,6 +8,7 @@ import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/presentation/screens/home/end_drawer.dart';
+import 'package:social_media/presentation/screens/posts_screen/posts_screen.dart';
 import 'package:social_media/presentation/screens/profile/edit/edit_cover_picture.dart';
 
 import 'package:social_media/presentation/widgets/gap.dart';
@@ -110,7 +111,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 final _screens = [
-  Scaffold(),
+  PostsScreen(),
   Scaffold(),
   Scaffold(),
   Scaffold(),
@@ -179,7 +180,7 @@ class MainAppBar extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add_photo_alternate),
             onPressed: () {
-              // showEditCoverPictureBottomSheet(context: context);
+              Navigator.of(context).pushNamed('/newpost');
             },
           ),
           Gap(W: 20.sm),

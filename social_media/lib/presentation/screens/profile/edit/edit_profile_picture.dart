@@ -12,7 +12,7 @@ showEditProfileBottomSheet(BuildContext context) {
 }
 
 class EditProfileBottomSheet extends StatelessWidget {
-  const EditProfileBottomSheet({super.key});
+  EditProfileBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {

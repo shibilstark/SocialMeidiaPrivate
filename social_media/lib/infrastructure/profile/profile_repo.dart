@@ -11,4 +11,7 @@ abstract class ProfileRepo {
       {required String? newPic});
   Future<Either<NameAndDisc, MainFailures>> changeNameAndDisc(
       {required NameAndDisc obj});
+  Future<Either<String, MainFailures>> deletePost(String postId);
+  Future<Either<String?, MainFailures>> editPostDiscrption(
+      {required String? newDisc, required String postId});
 }

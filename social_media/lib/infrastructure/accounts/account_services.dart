@@ -72,10 +72,9 @@ class AccountServices implements AccountRepo {
             id: user.data()["userId"],
             email: email,
           );
-          log("Success");
+
           return Left(UserModel.fromMap(user.data()));
         } else {
-          log("User Not Found");
           return const Right(MainFailures(
               error: "User Not Found",
               failureType: MyAppFilures.emailOrPasswordFailure));

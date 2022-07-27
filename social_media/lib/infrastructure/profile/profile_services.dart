@@ -26,19 +26,20 @@ class ProfileServices implements ProfileRepo {
 
       UserModel userModel = UserModel.fromMap(userData.data()!);
 
-      final postsData =
-          await FirebaseFirestore.instance.collection(Collections.post).get();
+      final postsData = await FirebaseFirestore.instance
+          .collection(Collections.post)
+          .orderBy('createdAt', descending: true)
+          .get();
 
       List<PostModel> posts = [];
 
       postsData.docs.map((post) {
         if (post.data()["userId"] == Global.USER_DATA.id) {
           PostModel postModel = PostModel.fromMap(post.data());
-
           posts.add(postModel);
         }
-      });
-
+      }).toList();
+      log(posts.length.toString());
       return Left(ProfileModel(posts: posts, user: userModel));
     } on FirebaseException catch (e) {
       log(e.toString());
@@ -146,6 +147,65 @@ class ProfileServices implements ProfileRepo {
       await userData.update({'name': obj.name, 'discription': obj.disc});
 
       return Left(obj);
+    } on FirebaseException catch (e) {
+      log(e.toString());
+
+      return Right(MainFailures(
+          error: firebaseCodeFix(e.code),
+          failureType: MyAppFilures.firebaseFailure));
+    } catch (e) {
+      log(e.toString());
+      return Right(MainFailures(
+          error: e.toString(), failureType: MyAppFilures.clientFailure));
+    }
+  }
+
+  @override
+  Future<Either<String, MainFailures>> deletePost(String postId) async {
+    try {
+      final postData = await FirebaseFirestore.instance
+          .collection(Collections.post)
+          .doc(postId)
+          .get();
+
+      // await FirebaseStorage.instance.ref(postData.data()!['postId']).delete();
+      await FirebaseStorage.instance
+          .refFromURL(postData.data()!['post'])
+          .delete();
+
+      await FirebaseFirestore.instance
+          .collection(Collections.post)
+          .doc(postId)
+          .delete();
+
+      return Left(postId);
+    } on FirebaseException catch (e) {
+      log(e.toString());
+
+      return Right(MainFailures(
+          error: firebaseCodeFix(e.code),
+          failureType: MyAppFilures.firebaseFailure));
+    } catch (e) {
+      log(e.toString());
+      return Right(MainFailures(
+          error: e.toString(), failureType: MyAppFilures.clientFailure));
+    }
+  }
+
+  @override
+  Future<Either<String?, MainFailures>> editPostDiscrption(
+      {required String? newDisc, required String postId}) async {
+    try {
+      final userData =
+          FirebaseFirestore.instance.collection(Collections.post).doc(postId);
+
+      if (newDisc == null) {
+        await userData.update({'discription': null});
+      } else {
+        await userData.update({'discription': newDisc});
+      }
+
+      return Left(newDisc);
     } on FirebaseException catch (e) {
       log(e.toString());
 
