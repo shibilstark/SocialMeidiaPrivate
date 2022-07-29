@@ -14,3 +14,11 @@ class LikeThePost extends PostActionsEvent {
   @override
   List<Object> get props => [likeObj];
 }
+
+class DisLikeThePost extends PostActionsEvent {
+  LikeModel likeObj;
+  DisLikeThePost(this.likeObj);
+
+  @override
+  List<Object> get props => [likeObj];
+}

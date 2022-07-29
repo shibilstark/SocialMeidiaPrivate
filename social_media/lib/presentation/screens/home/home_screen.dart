@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
                 topLeft: Radius.circular(40.sm),
                 topRight: Radius.circular(40.sm)),
             child: SizedBox(
-              height: 61.sm,
+              height: 62.sm,
               child: BottomNavigationBar(
                   currentIndex: _bottomNav.value,
                   onTap: (value) {

@@ -9,11 +9,10 @@ abstract class PostActionsState extends Equatable {
 
 class PostActionsInitial extends PostActionsState {}
 
-class PostActionLikeLoading extends PostActionsState {}
+// like
 
 class PostActionLikeSuccess extends PostActionsState {
   LikeModel likeObj;
-
   PostActionLikeSuccess(this.likeObj);
 
   @override
@@ -21,3 +20,14 @@ class PostActionLikeSuccess extends PostActionsState {
 }
 
 class PostActionLikeError extends PostActionsState {}
+
+// Dislike
+class PostActionDisLikeSuccess extends PostActionsState {
+  LikeModel likeObj;
+  PostActionDisLikeSuccess(this.likeObj);
+
+  @override
+  List<Object> get props => [likeObj];
+}
+
+class PostActionDisLikError extends PostActionsState {}

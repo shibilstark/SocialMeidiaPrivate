@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -14,6 +16,7 @@ import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/presentation/router/router.dart';
 import 'package:social_media/presentation/shimmers/profile_part_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
+import 'package:social_media/presentation/widgets/theme_switch.dart';
 import '../../../core/constants/enums.dart';
 
 class EndDrawer extends StatelessWidget {
@@ -30,63 +33,14 @@ class EndDrawer extends StatelessWidget {
         child: Drawer(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
-            child: Column(
+            child: ListView(
               children: [
                 const EndDrawerMiniProfile(),
                 Container(
                   padding: EdgeInsets.all(20.sm),
                   child: Column(
                     children: [
-                      BlocBuilder<ThemeBloc, ThemeState>(
-                        builder: (context, state) {
-                          return SizedBox(
-                            height: 35.sm,
-                            child: Row(
-                              children: [
-                                IconTheme(
-                                    data: Theme.of(context).iconTheme,
-                                    child: Icon(
-                                      state.isDark
-                                          ? Icons.light_mode
-                                          : Icons.dark_mode,
-                                      size: 20,
-                                    )),
-                                Gap(
-                                  W: 10.sm,
-                                ),
-                                Text(
-                                  state.isDark
-                                      ? "Back to Light"
-                                      : "Switch to Dark",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(
-                                          fontSize: 18.sm,
-                                          fontWeight: FontWeight.w400),
-                                ),
-                                const Spacer(),
-                                Builder(builder: (context) {
-                                  bool sValue = state.isDark ? true : false;
-                                  return Switch(
-                                      value: sValue,
-                                      onChanged: (value) async {
-                                        if (value) {
-                                          BlocProvider.of<ThemeBloc>(context)
-                                              .add(ChangeTheme(
-                                                  changeTo: MyThemeMode.dark));
-                                        } else {
-                                          BlocProvider.of<ThemeBloc>(context)
-                                              .add(ChangeTheme(
-                                                  changeTo: MyThemeMode.light));
-                                        }
-                                      });
-                                }),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                      ThemChangeButton(),
                       const Divider(),
                       const MenuTiles(
                         icon: Icons.settings,

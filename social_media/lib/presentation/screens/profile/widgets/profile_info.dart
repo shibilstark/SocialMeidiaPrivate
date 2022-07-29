@@ -58,7 +58,7 @@ class ProfileInfo extends StatelessWidget {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       user.discription!,
-                                      // maxLines: 3,
+                                      softWrap: true,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -165,7 +165,7 @@ class ProfileImageAndNameWidget extends StatelessWidget {
                     return Padding(
                       padding: EdgeInsets.only(top: 50.sm),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ItemBox(
                               title: "Followers",
@@ -328,7 +328,7 @@ class ItemBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 70.sm,
-      width: 70.sm,
+      // width: 70.sm,
       decoration: BoxDecoration(
           // color: smoothWhite,
           borderRadius: BorderRadius.circular(10.sm)),
@@ -340,7 +340,7 @@ class ItemBox extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
-                .copyWith(fontSize: 15.sm),
+                .copyWith(fontSize: 14.sm),
           ),
           Gap(
             H: 5.sm,
@@ -350,7 +350,7 @@ class ItemBox extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
-                .copyWith(fontSize: 17.sm),
+                .copyWith(fontSize: 16.sm),
           )
         ],
       ),

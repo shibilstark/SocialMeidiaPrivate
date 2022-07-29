@@ -1,6 +1,5 @@
 class LikeModel {
-  String likerId;
   String postId;
-
+  String likerId;
   LikeModel({required this.likerId, required this.postId});
 }

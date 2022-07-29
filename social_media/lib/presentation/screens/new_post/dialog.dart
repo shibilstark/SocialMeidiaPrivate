@@ -34,8 +34,20 @@ class UploadPostLoadingDialog extends StatelessWidget {
             return BlocConsumer<UploadPostBloc, UploadPostState>(
               listener: (context, state) {
                 if (state is UploadPostSuccess) {
-                  log("added");
-                  context.read<ProfileBloc>().add(GetCurrentUser());
+                  bool alreadyFound = false;
+
+                  for (PostModel post in posts) {
+                    if (post.postId == state.postModel.postId) {
+                      alreadyFound = true;
+                      break;
+                    }
+                  }
+
+                  if (!alreadyFound) {
+                    posts.insert(0, state.postModel);
+                  }
+
+                  // context.read<ProfileBloc>().add(GetCurrentUser());
                   // (profileState as ProfileSuccess)
                   //     .profileModel
                   //     .posts

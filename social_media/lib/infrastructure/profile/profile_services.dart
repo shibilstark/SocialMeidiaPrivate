@@ -14,6 +14,8 @@ import 'package:dartz/dartz.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/infrastructure/profile/profile_repo.dart';
 
+import 'package:flutter/foundation.dart' as printer;
+
 @LazySingleton(as: ProfileRepo)
 class ProfileServices implements ProfileRepo {
   @override
@@ -196,13 +198,18 @@ class ProfileServices implements ProfileRepo {
   Future<Either<String?, MainFailures>> editPostDiscrption(
       {required String? newDisc, required String postId}) async {
     try {
-      final userData =
-          FirebaseFirestore.instance.collection(Collections.post).doc(postId);
+      log("${newDisc}");
+      final userData = await FirebaseFirestore.instance
+          .collection(Collections.post)
+          .doc(postId);
 
       if (newDisc == null) {
         await userData.update({'discription': null});
+
+        printer.debugPrint("${newDisc}");
       } else {
         await userData.update({'discription': newDisc});
+        printer.debugPrint("${newDisc}");
       }
 
       return Left(newDisc);

@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media/application/post_actions/post_actions_bloc.dart';
 import 'package:social_media/application/post_crud/post_crud_bloc.dart';
 import 'package:social_media/application/profile/profile_bloc.dart';
-import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/domain/models/local_models/like_model.dart';
-import 'package:social_media/presentation/screens/profile/widgets/edit_post.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,8 +18,8 @@ import 'package:social_media/presentation/screens/profile/widgets/profile_info.d
 import 'package:social_media/presentation/widgets/dummy_profile.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 
-class UserPost extends StatelessWidget {
-  UserPost({
+class GlobalPost extends StatelessWidget {
+  GlobalPost({
     required Key? postId,
     required this.index,
     required this.profileModel,
@@ -32,7 +30,6 @@ class UserPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserModel user = profileModel.user;
-    List<PostModel> posts = profileModel.posts;
     PostModel post = profileModel.posts[index];
     return Container(
       child: Column(
@@ -74,10 +71,10 @@ class UserPost extends StatelessWidget {
                 ],
               )),
               Spacer(),
-              UserPostDropDownWidget(
-                postId: post.postId,
-                currentDiscr: post.discription,
-              )
+              // UserPostDropDownWidget(
+              //   postId: post.postId,
+              //   currentDiscr: post.discription,
+              // )
             ],
           ),
           post.post == null
@@ -87,8 +84,7 @@ class UserPost extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Container(
-                          constraints: BoxConstraints(maxHeight: 600.sm),
-                          // height: 250.sm,
+                          height: 250.sm,
                           width: double.infinity,
                           color: darkBg,
                           child: Opacity(
@@ -324,39 +320,39 @@ class UserPost extends StatelessWidget {
   }
 }
 
-class UserPostDropDownWidget extends StatelessWidget {
-  const UserPostDropDownWidget(
-      {Key? key, required this.postId, required this.currentDiscr})
-      : super(key: key);
+// class UserPostDropDownWidget extends StatelessWidget {
+//   const UserPostDropDownWidget(
+//       {Key? key, required this.postId, required this.currentDiscr})
+//       : super(key: key);
 
-  final String postId;
-  final String? currentDiscr;
+//   final String postId;
+//   final String? currentDiscr;
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<PostCrudBloc, PostCrudState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return DropdownButtonHideUnderline(
-          child: DropdownButton(
-            dropdownColor: Theme.of(context).bottomSheetTheme.backgroundColor,
-            items: _dropItems
-                .map((item) =>
-                    _buildMenuItem(item, context, postId, currentDiscr))
-                .toList(),
-            onChanged: (value) {},
-            icon: IconTheme(
-              data: Theme.of(context).iconTheme.copyWith(size: 18),
-              child: Icon(
-                Icons.more_vert,
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocConsumer<PostCrudBloc, PostCrudState>(
+//       listener: (context, state) {},
+//       builder: (context, state) {
+//         return DropdownButtonHideUnderline(
+//           child: DropdownButton(
+//             dropdownColor: Theme.of(context).bottomSheetTheme.backgroundColor,
+//             items: _dropItems
+//                 .map((item) =>
+//                     _buildMenuItem(item, context, postId, currentDiscr))
+//                 .toList(),
+//             onChanged: (value) {},
+//             icon: IconTheme(
+//               data: Theme.of(context).iconTheme.copyWith(size: 18),
+//               child: Icon(
+//                 Icons.more_vert,
+//               ),
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
 
 final _dropItems = [
   "Edit",
@@ -366,40 +362,40 @@ final _dropItems = [
 // final dummyLongText =
 //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec egestas posuere pretium. Nam volutpat dictum lorem in volutpat. Aenean convallis ipsum sed sagittis bibendum. Sed ut bibendum velit, a consectetur est. Suspendisse feugiat nulla in felis mollis dignissim et id lectus. Nullam nec massa orci. Curabitur odio tellus, tempus ut imperdiet in, ullamcorper nec nibh. Praesent nisi nunc";
 
-DropdownMenuItem<String> _buildMenuItem(
-    String item, BuildContext context, String postId, String? currentDiscr) {
-  return DropdownMenuItem(
-    onTap: () {
-      if (item == "Edit") {
-        showEditPostDiscriptionSheet(
-            context: context, postId: postId, currentDisr: currentDiscr);
-      }
-      if (item == "Delete") {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          context.read<PostCrudBloc>().add(DeletePost(id: postId));
-        });
-      }
-    },
-    value: item,
-    child: BlocBuilder<ProfileBloc, ProfileState>(
-      builder: (context, profileState) {
-        ProfileModel model = (profileState as ProfileSuccess).profileModel;
-        return BlocConsumer<PostCrudBloc, PostCrudState>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            return Text(
-              item,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 14.sm,
-                    fontWeight: FontWeight.normal,
-                  ),
-            );
-          },
-        );
-      },
-    ),
-  );
-}
+// DropdownMenuItem<String> _buildMenuItem(
+//     String item, BuildContext context, String postId, String? currentDiscr) {
+//   return DropdownMenuItem(
+//     onTap: () {
+//       if (item == "Edit") {
+//         showEditPostDiscriptionSheet(
+//             context: context, postId: postId, currentDisr: currentDiscr);
+//       }
+//       if (item == "Delete") {
+//         WidgetsBinding.instance.addPostFrameCallback((_) {
+//           context.read<PostCrudBloc>().add(DeletePost(id: postId));
+//         });
+//       }
+//     },
+//     value: item,
+//     child: BlocBuilder<ProfileBloc, ProfileState>(
+//       builder: (context, profileState) {
+//         ProfileModel model = (profileState as ProfileSuccess).profileModel;
+//         return BlocConsumer<PostCrudBloc, PostCrudState>(
+//           listener: (context, state) {},
+//           builder: (context, state) {
+//             return Text(
+//               item,
+//               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+//                     fontSize: 14.sm,
+//                     fontWeight: FontWeight.normal,
+//                   ),
+//             );
+//           },
+//         );
+//       },
+//     ),
+//   );
+// }
 
 class PostActionButton extends StatelessWidget {
   const PostActionButton({Key? key, required this.icon}) : super(key: key);

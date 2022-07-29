@@ -9,8 +9,9 @@ import 'package:injectable/injectable.dart' as _i2;
 
 import '../../application/auth/auth_bloc.dart' as _i5;
 import '../../application/edit_profile_pics/edit_profile_bloc.dart' as _i10;
-import '../../application/post_crud/post_crud_bloc.dart' as _i11;
-import '../../application/profile/profile_bloc.dart' as _i12;
+import '../../application/post_actions/post_actions_bloc.dart' as _i11;
+import '../../application/post_crud/post_crud_bloc.dart' as _i12;
+import '../../application/profile/profile_bloc.dart' as _i13;
 import '../../infrastructure/accounts/account_repo.dart' as _i3;
 import '../../infrastructure/accounts/account_services.dart' as _i4;
 import '../../infrastructure/post/post_repo.dart' as _i6;
@@ -30,8 +31,10 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i8.ProfileRepo>(() => _i9.ProfileServices());
   gh.factory<_i10.EditProfileBloc>(
       () => _i10.EditProfileBloc(get<_i8.ProfileRepo>()));
-  gh.factory<_i11.PostCrudBloc>(
-      () => _i11.PostCrudBloc(get<_i8.ProfileRepo>()));
-  gh.factory<_i12.ProfileBloc>(() => _i12.ProfileBloc(get<_i8.ProfileRepo>()));
+  gh.factory<_i11.PostActionsBloc>(
+      () => _i11.PostActionsBloc(get<_i6.PostRepo>()));
+  gh.factory<_i12.PostCrudBloc>(
+      () => _i12.PostCrudBloc(get<_i8.ProfileRepo>()));
+  gh.factory<_i13.ProfileBloc>(() => _i13.ProfileBloc(get<_i8.ProfileRepo>()));
   return get;
 }

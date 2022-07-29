@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -29,6 +31,12 @@ class PostCrudBloc extends Bloc<PostCrudEvent, PostCrudState> {
     });
     on<EditPostDisc>((event, emit) async {
       emit(DeletePostProcessing());
+
+      if (event.newDisc == null) {
+        log("null");
+      } else {
+        log(event.newDisc!);
+      }
 
       final response = await _profile_repo.editPostDiscrption(
           newDisc: event.newDisc, postId: event.postId);
