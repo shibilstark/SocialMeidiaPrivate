@@ -4,21 +4,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_media/application/edit_profile_pics/edit_profile_bloc.dart';
 import 'package:social_media/application/home/home_feed_bloc.dart';
+import 'package:social_media/application/others_profile/others_profile_bloc.dart';
 import 'package:social_media/application/post_crud/post_crud_bloc.dart';
 import 'package:social_media/application/profile/profile_bloc.dart';
 
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
-import 'package:social_media/domain/global/global_variables.dart';
-import 'package:social_media/domain/models/user_model/user_model.dart';
+import 'package:social_media/presentation/screens/posts_screen/global_post.dart';
 import 'package:social_media/presentation/screens/profile/edit/dialog.dart';
 import 'package:social_media/presentation/screens/profile/widgets/profile_info.dart';
 import 'package:social_media/presentation/screens/profile/widgets/user_post.dart';
 import 'package:social_media/presentation/shimmers/inner_profile_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class OthersProfileScreen extends StatelessWidget {
+  const OthersProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +99,9 @@ class ProfileBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: constPadding,
-      child: BlocBuilder<ProfileBloc, ProfileState>(
+      child: BlocBuilder<OthersProfileBloc, OthersProfileState>(
         builder: (context, state) {
-          if (state is ProfileError) {
+          if (state is OthersProfileError) {
             return SingleChildScrollView(
               child: Center(
                 child: Column(
@@ -137,7 +137,7 @@ class ProfileBody extends StatelessWidget {
                 ),
               ),
             );
-          } else if (state is ProfileSuccess) {
+          } else if (state is OthersProfileSuccess) {
             return RefreshIndicator(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               color: primaryBlue,
@@ -181,12 +181,13 @@ class ProfileBody extends StatelessWidget {
                                 state.profileModel.posts.length, (index) {
                               return Column(
                                 children: [
-                                  UserPost(
-                                      postId: ValueKey(state
-                                          .profileModel.posts[index].postId),
-                                      profileModel: state.profileModel,
-                                      index: index,
-                                      type: Post.user),
+                                  GlobalPost(
+                                    postId: ValueKey(
+                                        state.profileModel.posts[index].postId),
+                                    post: state.profileModel.posts[index],
+                                    user: state.profileModel.user,
+                                    index: index,
+                                  ),
                                   index == state.profileModel.posts.length - 1
                                       ? Column(
                                           children: [
@@ -199,19 +200,6 @@ class ProfileBody extends StatelessWidget {
                               );
                             }),
                           );
-
-                          // return ListView.separated(
-                          //     // addAutomaticKeepAlives: true,
-                          //     shrinkWrap: true,
-                          //     physics: NeverScrollableScrollPhysics(),
-                          //     itemBuilder: (context, index) => UserPost(
-                          //         postId: ValueKey(
-                          //             state.profileModel.posts[index].postId),
-                          //         profileModel: state.profileModel,
-                          //         index: index),
-                          //     separatorBuilder: (context, index) =>
-                          //         Divider(thickness: 0.4),
-                          //     itemCount: state.profileModel.posts.length);
                         },
                       );
                     },

@@ -64,9 +64,9 @@ class AccountServices implements AccountRepo {
       final users = collection.docs;
 
       for (var user in users) {
-        if (user.data()["email"] == email) {
-          await FirebaseAuth.instance
-              .signInWithEmailAndPassword(email: email, password: password);
+        if (user.data()["email"] == email.trim()) {
+          // await FirebaseAuth.instance
+          //     .signInWithEmailAndPassword(email: email, password: password);
 
           await UserDataStore.saveUserData(
             id: user.data()["userId"],

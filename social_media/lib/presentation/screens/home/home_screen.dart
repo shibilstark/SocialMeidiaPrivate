@@ -1,16 +1,12 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
-import 'package:social_media/core/colors/colors.dart';
+import 'package:social_media/application/home/home_feed_bloc.dart';
 import 'package:social_media/core/constants/constants.dart';
-import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/presentation/screens/home/end_drawer.dart';
 import 'package:social_media/presentation/screens/posts_screen/posts_screen.dart';
-import 'package:social_media/presentation/screens/profile/edit/edit_cover_picture.dart';
-
 import 'package:social_media/presentation/widgets/gap.dart';
 
 ValueNotifier<int> _bottomNav = ValueNotifier(0);
@@ -143,7 +139,7 @@ class MainAppBar extends StatelessWidget {
                 Center(
                   child: IconButton(
                       onPressed: () {
-                        // Navigator.of(context).pushNamed("/newpost");
+                        context.read<HomeFeedBloc>().add(GetHomeFeed());
                       },
                       icon: IconTheme(
                         data: Theme.of(context).primaryIconTheme,

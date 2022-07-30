@@ -5,6 +5,8 @@ import 'package:social_media/domain/models/profile_model/profile_model.dart';
 
 abstract class ProfileRepo {
   Future<Either<ProfileModel, MainFailures>> getCurrentUser();
+  Future<Either<ProfileModel, MainFailures>> getUserWithId(
+      {required String userId});
   Future<Either<String?, MainFailures>> changeProfilePic(
       {required String? newPic});
   Future<Either<String?, MainFailures>> changeCoverPic(

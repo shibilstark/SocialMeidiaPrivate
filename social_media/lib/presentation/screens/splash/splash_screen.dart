@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media/application/home/home_feed_bloc.dart';
 import 'package:social_media/application/profile/profile_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/domain/db/user_data/user_data.dart';
@@ -17,6 +18,7 @@ class SplashScreen extends StatelessWidget {
       } else {
         Global.USER_DATA = data;
         context.read<ProfileBloc>().add(GetCurrentUser());
+        context.read<HomeFeedBloc>().add(GetHomeFeed());
         Navigator.of(context).pushReplacementNamed("/home");
       }
     });

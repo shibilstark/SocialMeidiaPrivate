@@ -34,7 +34,7 @@ class UploadPostBloc extends Bloc<UploadPostEvent, UploadPostState> {
           final snapShot = await task.whenComplete(() {});
 
           final imageUrl = await snapShot.ref.getDownloadURL();
-          final newPostModel = event.postModel.copyWith(post: imageUrl);
+          PostModel newPostModel = event.postModel.copyWith(post: imageUrl);
 
           await postCollection
               .doc(newPostModel.postId)
@@ -58,7 +58,7 @@ class UploadPostBloc extends Bloc<UploadPostEvent, UploadPostState> {
 
           final videoUrl = await snapShot.ref.getDownloadURL();
           final thumbUrl = await thumbSnapShot.ref.getDownloadURL();
-          final newPostModel = event.postModel
+          PostModel newPostModel = event.postModel
               .copyWith(post: videoUrl, videoThumbnail: thumbUrl);
 
           await postCollection

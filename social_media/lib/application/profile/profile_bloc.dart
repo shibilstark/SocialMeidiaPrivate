@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
@@ -11,7 +13,7 @@ import 'package:social_media/infrastructure/profile/profile_services.dart';
 part 'profile_event.dart';
 part 'profile_state.dart';
 
-ProfileState? _newState;
+ProfileState _newState = ProfileLoading();
 
 @injectable
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
@@ -19,7 +21,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   ProfileBloc(this._profile_repo) : super(ProfileInitial()) {
     on<GetCurrentUser>((event, emit) async {
-      if (_newState == null) {
+      if (_newState is ProfileLoading) {
         emit(ProfileLoading());
       }
 
@@ -34,7 +36,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         },
       );
 
-      emit(_newState!);
+      emit(_newState);
     });
   }
 }

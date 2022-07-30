@@ -11,6 +11,17 @@ class HomeFeedInitial extends HomeFeedState {}
 
 class HomeFeedLoding extends HomeFeedState {}
 
-class HomeFeedSuccess extends HomeFeedState {}
+class HomeFeedSuccess extends HomeFeedState {
+  List<HomeFeedModel> homeFeed;
 
-class HomeFeedError extends HomeFeedState {}
+  HomeFeedSuccess(this.homeFeed);
+  @override
+  List<Object> get props => [homeFeed];
+}
+
+class HomeFeedError extends HomeFeedState {
+  MainFailures failure;
+  HomeFeedError(this.failure);
+  @override
+  List<Object> get props => [failure];
+}

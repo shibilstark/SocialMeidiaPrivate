@@ -8,11 +8,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:social_media/application/auth/auth_bloc.dart';
+import 'package:social_media/application/home/home_feed_bloc.dart';
 import 'package:social_media/application/profile/profile_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/core/controllers/text_controllers.dart';
 import 'package:social_media/core/themes/themes.dart';
+import 'package:social_media/domain/db/user_data/user_data.dart';
+import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/presentation/widgets/custom_text_field.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 
@@ -95,10 +98,20 @@ class LoginActionButtonWidget extends StatelessWidget {
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthStateLogginSuccess) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              Fluttertoast.showToast(msg: "Logging in");
-              context.read<ProfileBloc>().add(GetCurrentUser());
-              Navigator.of(context).pushReplacementNamed("/home");
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              final model = await UserDataStore.getUserData();
+
+              if (model == null) {
+                Navigator.of(context).pushReplacementNamed("/login");
+                Fluttertoast.showToast(
+                    msg: "somthing went wrong please login again");
+              } else {
+                Global.USER_DATA = UserData(id: model.id, email: model.email);
+                // Fluttertoast.showToast(msg: "Logging in");
+                context.read<ProfileBloc>().add(GetCurrentUser());
+                context.read<HomeFeedBloc>().add(GetHomeFeed());
+                Navigator.of(context).pushReplacementNamed("/home");
+              }
             });
           } else if (state is AuthStateLogginError) {
             Fluttertoast.showToast(msg: state.error.error);
