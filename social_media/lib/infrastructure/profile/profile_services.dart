@@ -264,4 +264,106 @@ class ProfileServices implements ProfileRepo {
           error: e.toString(), failureType: MyAppFilures.clientFailure));
     }
   }
+
+  @override
+  Future<Either<String, MainFailures>> follow(
+      {required String profileId}) async {
+    try {
+      final user = FirebaseFirestore.instance
+          .collection(Collections.users)
+          .doc(profileId);
+      final selfUser = FirebaseFirestore.instance
+          .collection(Collections.users)
+          .doc(Global.USER_DATA.id);
+      final self = await FirebaseFirestore.instance
+          .collection(Collections.users)
+          .doc(Global.USER_DATA.id)
+          .get();
+
+      final datas = await user.get();
+      final followers = await datas.data()!["followers"] as List;
+      final following = await self.data()!["following"] as List;
+
+      if (!followers.contains(Global.USER_DATA.id)) {
+        await user.update({
+          "followers": FieldValue.arrayUnion([Global.USER_DATA.id])
+        });
+
+        if (!following.contains(profileId)) {
+          await selfUser.update({
+            "following": FieldValue.arrayUnion([profileId])
+          });
+        }
+      }
+
+      return Left(Global.USER_DATA.id);
+    } on FirebaseException catch (e) {
+      log(e.toString());
+      return Right(MainFailures(
+          error: firebaseCodeFix(e.code),
+          failureType: MyAppFilures.firebaseFailure));
+    } catch (e) {
+      log(e.toString());
+      return Right(MainFailures(
+          error: e.toString(), failureType: MyAppFilures.clientFailure));
+    }
+  }
+
+  @override
+  Future<Either<String, MainFailures>> unfollow(
+      {required String profileId}) async {
+    try {
+      final user = FirebaseFirestore.instance
+          .collection(Collections.users)
+          .doc(profileId);
+      final selfUser = FirebaseFirestore.instance
+          .collection(Collections.users)
+          .doc(Global.USER_DATA.id);
+      final self = await FirebaseFirestore.instance
+          .collection(Collections.users)
+          .doc(Global.USER_DATA.id)
+          .get();
+
+      final datas = await user.get();
+      final followers = await datas.data()!["followers"] as List;
+      final following = await self.data()!["following"] as List;
+
+      if (followers.contains(Global.USER_DATA.id)) {
+        await user.update({
+          "followers": FieldValue.arrayRemove([Global.USER_DATA.id])
+        });
+
+        if (following.contains(profileId)) {
+          await selfUser.update({
+            "following": FieldValue.arrayRemove([profileId])
+          });
+        }
+      }
+
+      // if (followers.contains(profileId)) {
+      //   await post.update({
+      //     "followers": FieldValue.arrayRemove([profileId])
+      //   });
+      //   return Left(PostActionDisLikeSuccess(
+      //       LikeModel(postId: likeObj.postId, likerId: profileId)));
+      // } else {
+      //   await post.update({
+      //     "followers": FieldValue.arrayUnion([profileId])
+      //   });
+      //   return Left(PostActionLikeSuccess(
+      //       LikeModel(postId: likeObj.postId, likerId: profileId)));
+      // }
+
+      return Left(Global.USER_DATA.id);
+    } on FirebaseException catch (e) {
+      log(e.toString());
+      return Right(MainFailures(
+          error: firebaseCodeFix(e.code),
+          failureType: MyAppFilures.firebaseFailure));
+    } catch (e) {
+      log(e.toString());
+      return Right(MainFailures(
+          error: e.toString(), failureType: MyAppFilures.clientFailure));
+    }
+  }
 }

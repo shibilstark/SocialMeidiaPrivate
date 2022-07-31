@@ -3,17 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_media/application/edit_profile_pics/edit_profile_bloc.dart';
+import 'package:social_media/application/follow/follow_bloc.dart';
 import 'package:social_media/application/home/home_feed_bloc.dart';
 import 'package:social_media/application/others_profile/others_profile_bloc.dart';
 import 'package:social_media/application/post_crud/post_crud_bloc.dart';
 import 'package:social_media/application/profile/profile_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
+import 'package:social_media/domain/global/global_variables.dart';
+import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/presentation/screens/others_profile/widgets/others_profile_info.dart';
 import 'package:social_media/presentation/screens/posts_screen/global_post.dart';
 import 'package:social_media/presentation/screens/profile/edit/dialog.dart';
 import 'package:social_media/presentation/shimmers/inner_profile_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
+import 'package:social_media/presentation/widgets/theme_switch.dart';
 
 class OthersProfileScreen extends StatelessWidget {
   const OthersProfileScreen({Key? key}) : super(key: key);
@@ -147,7 +151,10 @@ class ProfileBody extends StatelessWidget {
               child: ListView(
                 children: [
                   OthersProfileInfo(),
-                  Gap(H: 30.sm),
+                  Gap(H: 15.sm),
+                  FollowMessageWidget(),
+                  // ThemChangeButton(),
+                  Gap(H: 15.sm),
                   Text("Posts",
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           fontSize: 20.sm, fontWeight: FontWeight.bold)),
@@ -209,6 +216,64 @@ class ProfileBody extends StatelessWidget {
           return InnerProfileLoading();
         },
       ),
+    );
+  }
+}
+
+class FollowMessageWidget extends StatelessWidget {
+  const FollowMessageWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<OthersProfileBloc, OthersProfileState>(
+      builder: (context, profilestate) {
+        bool following = false;
+        UserModel user =
+            (profilestate as OthersProfileSuccess).profileModel.user;
+
+        if (user.followers.contains(Global.USER_DATA.id)) {
+          following = true;
+        }
+
+        return BlocBuilder<FollowBloc, FollowState>(
+          builder: (context, state) {
+            if (state is FollowSuccess) {
+              following = true;
+            }
+            if (state is UnFollowSuccess) {
+              following = false;
+            }
+            return Container(
+              child: Row(children: [
+                Expanded(
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (profilestate.profileModel.user.followers
+                            .contains(Global.USER_DATA.id)) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            context
+                                .read<FollowBloc>()
+                                .add(UnFollow(profileId: user.userId));
+                          });
+                        } else {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            context
+                                .read<FollowBloc>()
+                                .add(Follow(profileId: user.userId));
+                          });
+                        }
+                      },
+                      child: following ? Text("Following") : Text("Follow")),
+                ),
+                Gap(W: 10.sm),
+                ElevatedButton(onPressed: () {}, child: Text("Message"))
+              ]),
+            );
+          },
+        );
+      },
     );
   }
 }

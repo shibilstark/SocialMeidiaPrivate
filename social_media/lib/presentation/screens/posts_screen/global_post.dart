@@ -6,6 +6,7 @@ import 'package:social_media/application/post_actions/post_actions_bloc.dart';
 import 'package:social_media/application/post_crud/post_crud_bloc.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/domain/models/local_models/like_model.dart';
+import 'package:social_media/presentation/screens/home/home_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,7 +45,7 @@ class GlobalPost extends StatelessWidget {
                   GestureDetector(
                     onTap: () async {
                       if (post.userId == Global.USER_DATA.id) {
-                        Navigator.of(context).pushNamed('/profile');
+                        gotoProfile();
                       } else {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           context

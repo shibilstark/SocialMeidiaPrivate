@@ -10,6 +10,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:social_media/application/auth/auth_bloc.dart';
 import 'package:social_media/application/edit_profile_pics/edit_profile_bloc.dart';
+import 'package:social_media/application/follow/follow_bloc.dart';
 import 'package:social_media/application/home/home_feed_bloc.dart';
 import 'package:social_media/application/others_profile/others_profile_bloc.dart';
 import 'package:social_media/application/post_actions/post_actions_bloc.dart';
@@ -84,6 +85,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<SearchBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<FollowBloc>(),
         ),
       ],
       child: ScreenUtilInit(

@@ -9,5 +9,5 @@ abstract class OthersProfileEvent extends Equatable {
 
 class GetUserWithId extends OthersProfileEvent {
   final String userId;
-  GetUserWithId({required this.userId});
+  const GetUserWithId({required this.userId});
 }

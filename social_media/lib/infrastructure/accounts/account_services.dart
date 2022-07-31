@@ -102,7 +102,6 @@ class AccountServices implements AccountRepo {
   @override
   Future<Either<UserModel, MainFailures>> logOut() async {
     try {
-      await FirebaseAuth.instance.signOut();
       await UserDataStore.clearUserData();
     } on FirebaseException catch (e) {
       e.toString();

@@ -16,4 +16,6 @@ abstract class ProfileRepo {
   Future<Either<String, MainFailures>> deletePost(String postId);
   Future<Either<String?, MainFailures>> editPostDiscrption(
       {required String? newDisc, required String postId});
+  Future<Either<String, MainFailures>> follow({required String profileId});
+  Future<Either<String, MainFailures>> unfollow({required String profileId});
 }

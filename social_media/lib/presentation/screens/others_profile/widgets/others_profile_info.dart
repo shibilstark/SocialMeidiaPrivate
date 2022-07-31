@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media/application/edit_profile_pics/edit_profile_bloc.dart';
+import 'package:social_media/application/follow/follow_bloc.dart';
 import 'package:social_media/application/others_profile/others_profile_bloc.dart';
 import 'package:social_media/application/post_crud/post_crud_bloc.dart';
 import 'package:social_media/application/profile/profile_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
+import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/domain/models/post_model/post_model.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/presentation/router/router.dart';
@@ -79,13 +81,13 @@ class OthersProfileInfo extends StatelessWidget {
 }
 
 class OthersProfileImageAndNameWidget extends StatelessWidget {
-  const OthersProfileImageAndNameWidget({
+  OthersProfileImageAndNameWidget({
     Key? key,
     required this.user,
     required this.posts,
   }) : super(key: key);
 
-  final UserModel user;
+  UserModel user;
   final List<PostModel> posts;
 
   @override
@@ -125,46 +127,67 @@ class OthersProfileImageAndNameWidget extends StatelessWidget {
                     ),
               const Spacer(),
               LimitedBox(
-                child: BlocBuilder<ProfileBloc, ProfileState>(
-                  builder: (context, state) {
-                    return Padding(
-                      padding: EdgeInsets.only(top: 50.sm),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ItemBox(
-                              title: "Followers",
-                              value: user.followers.length.toString()),
-                          Gap(
-                            W: 10.sm,
-                          ),
-                          ItemBox(
-                              title: "Following",
-                              value: user.following.length.toString()),
-                          Gap(
-                            W: 10.sm,
-                          ),
-                          BlocBuilder<PostCrudBloc, PostCrudState>(
-                            builder: (context, countState) {
-                              int length = posts.length;
+                child: Padding(
+                  padding: EdgeInsets.only(top: 50.sm),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BlocBuilder<ProfileBloc, ProfileState>(
+                        builder: (context, profileState) {
+                          return BlocBuilder<FollowBloc, FollowState>(
+                            builder: (context, state) {
+                              if (state is FollowSuccess) {
+                                if (!user.followers
+                                    .contains(Global.USER_DATA.id)) {
+                                  user.followers.add(state.profileId);
 
-                              if (countState is DeletePostSuccess) {
-                                length = (state as ProfileSuccess)
-                                    .profileModel
-                                    .posts
-                                    .length;
+                                  if (profileState is ProfileSuccess) {
+                                    if (!profileState
+                                        .profileModel.user.following
+                                        .contains(Global.USER_DATA.id)) {
+                                      profileState.profileModel.user.following
+                                          .add(Global.USER_DATA.id);
+                                    }
+                                  }
+                                }
+                              }
+                              if (state is UnFollowSuccess) {
+                                if (user.followers
+                                    .contains(Global.USER_DATA.id)) {
+                                  user.followers.remove(state.profileId);
+
+                                  if (profileState is ProfileSuccess) {
+                                    if (profileState.profileModel.user.following
+                                        .contains(Global.USER_DATA.id)) {
+                                      profileState.profileModel.user.following
+                                          .remove(Global.USER_DATA.id);
+                                    }
+                                  }
+                                }
                               }
 
                               return ItemBox(
-                                title: "Posts",
-                                value: length.toString(),
-                              );
+                                  title: "Followers",
+                                  value: user.followers.length.toString());
                             },
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
+                      Gap(
+                        W: 10.sm,
+                      ),
+                      ItemBox(
+                          title: "Following",
+                          value: user.following.length.toString()),
+                      Gap(
+                        W: 10.sm,
+                      ),
+                      ItemBox(
+                        title: "Posts",
+                        value: posts.length.toString(),
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],

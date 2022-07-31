@@ -16,6 +16,7 @@ import 'package:social_media/presentation/screens/profile/widgets/profile_info.d
 import 'package:social_media/presentation/screens/profile/widgets/user_post.dart';
 import 'package:social_media/presentation/shimmers/inner_profile_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
+import 'package:social_media/presentation/widgets/theme_switch.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -149,6 +150,7 @@ class ProfileBody extends StatelessWidget {
               child: ListView(
                 children: [
                   ProfileInfo(),
+                  ThemChangeButton(),
                   Gap(H: 30.sm),
                   Text("Posts",
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(

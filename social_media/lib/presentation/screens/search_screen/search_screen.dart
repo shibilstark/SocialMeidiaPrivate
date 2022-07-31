@@ -121,19 +121,26 @@ class SearchUserTextFieldWidget extends StatelessWidget {
                       .trim()));
             });
           },
-          style: TextStyle(
-              color: softBlack, fontSize: 18.sm, fontWeight: FontWeight.normal),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .copyWith(fontSize: 17.sm, fontWeight: FontWeight.normal),
           cursorColor: softBlack,
           decoration: InputDecoration(
             hintText: "Search...",
-            hintStyle: TextStyle(
-              color: softBlack.withOpacity(0.5),
-            ),
+            hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.normal,
+                fontSize: 17.sm,
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .color!
+                    .withOpacity(0.5)),
             // contentPadding: EdgeInsets.symmetric(
             //     vertical: 14.sm, horizontal: 10.sm),
             border: InputBorder.none,
             filled: true,
-            fillColor: const Color.fromARGB(255, 98, 98, 98),
+            fillColor: Color.fromARGB(77, 85, 85, 85),
           ),
         ),
       ),
