@@ -7,13 +7,11 @@ import 'package:social_media/application/home/home_feed_bloc.dart';
 import 'package:social_media/application/others_profile/others_profile_bloc.dart';
 import 'package:social_media/application/post_crud/post_crud_bloc.dart';
 import 'package:social_media/application/profile/profile_bloc.dart';
-
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
+import 'package:social_media/presentation/screens/others_profile/widgets/others_profile_info.dart';
 import 'package:social_media/presentation/screens/posts_screen/global_post.dart';
 import 'package:social_media/presentation/screens/profile/edit/dialog.dart';
-import 'package:social_media/presentation/screens/profile/widgets/profile_info.dart';
-import 'package:social_media/presentation/screens/profile/widgets/user_post.dart';
 import 'package:social_media/presentation/shimmers/inner_profile_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 
@@ -148,7 +146,7 @@ class ProfileBody extends StatelessWidget {
               },
               child: ListView(
                 children: [
-                  ProfileInfo(),
+                  OthersProfileInfo(),
                   Gap(H: 30.sm),
                   Text("Posts",
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(

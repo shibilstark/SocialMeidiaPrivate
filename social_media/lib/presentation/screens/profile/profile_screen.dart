@@ -25,8 +25,8 @@ class ProfileScreen extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {});
 
     return Scaffold(
-      appBar:
-          PreferredSize(child: ProfileAppBar(), preferredSize: appBarHeight),
+      // appBar:
+      //     PreferredSize(child: ProfileAppBar(), preferredSize: appBarHeight),
       body: SafeArea(
           child: BlocConsumer<PostCrudBloc, PostCrudState>(
         listener: (context, state) {
@@ -50,47 +50,47 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class ProfileAppBar extends StatelessWidget {
-  const ProfileAppBar({Key? key}) : super(key: key);
+// class ProfileAppBar extends StatelessWidget {
+//   const ProfileAppBar({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(40.sm),
-          bottomRight: Radius.circular(40.sm)),
-      child: AppBar(
-        leading: Padding(
-          padding: EdgeInsets.only(left: 15.sm),
-          child: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
-        title: Text(
-          "Profile",
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(color: pureWhite),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/newpost');
-              },
-              icon: Icon(Icons.add_photo_alternate)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
-          Gap(
-            W: 15.sm,
-          )
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return ClipRRect(
+//       borderRadius: BorderRadius.only(
+//           bottomLeft: Radius.circular(40.sm),
+//           bottomRight: Radius.circular(40.sm)),
+//       child: AppBar(
+//         leading: Padding(
+//           padding: EdgeInsets.only(left: 15.sm),
+//           child: IconButton(
+//             icon: Icon(Icons.arrow_back),
+//             onPressed: () {
+//               Navigator.of(context).pop();
+//             },
+//           ),
+//         ),
+//         title: Text(
+//           "Profile",
+//           style: Theme.of(context)
+//               .textTheme
+//               .titleMedium!
+//               .copyWith(color: pureWhite),
+//         ),
+//         actions: [
+//           IconButton(
+//               onPressed: () {
+//                 Navigator.of(context).pushNamed('/newpost');
+//               },
+//               icon: Icon(Icons.add_photo_alternate)),
+//           IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+//           Gap(
+//             W: 15.sm,
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class ProfileBody extends StatelessWidget {
   const ProfileBody({Key? key}) : super(key: key);
@@ -98,7 +98,7 @@ class ProfileBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: constPadding,
+      padding: EdgeInsets.symmetric(horizontal: 10.sm, vertical: 5.sm),
       child: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
           if (state is ProfileError) {

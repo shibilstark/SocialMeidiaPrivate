@@ -15,6 +15,7 @@ import 'package:social_media/application/others_profile/others_profile_bloc.dart
 import 'package:social_media/application/post_actions/post_actions_bloc.dart';
 import 'package:social_media/application/post_crud/post_crud_bloc.dart';
 import 'package:social_media/application/profile/profile_bloc.dart';
+import 'package:social_media/application/search/search_bloc.dart';
 import 'package:social_media/application/theme/theme_bloc.dart';
 import 'package:social_media/application/upload_post/upload_post_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
@@ -80,6 +81,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<OthersProfileBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<SearchBloc>(),
         ),
       ],
       child: ScreenUtilInit(

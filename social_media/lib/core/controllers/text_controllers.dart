@@ -41,3 +41,11 @@ class NewPostTextEditControllers {
     tag.clear();
   }
 }
+
+class SearchTextControllers {
+  static final TextEditingController userSearch = TextEditingController();
+
+  static clearControllers() {
+    userSearch.clear();
+  }
+}
