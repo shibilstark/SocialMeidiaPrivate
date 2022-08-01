@@ -75,7 +75,7 @@ class AccountServices implements AccountRepo {
 
           return Left(UserModel.fromMap(user.data()));
         } else {
-          return const Right(MainFailures(
+          return Right(MainFailures(
               error: "User Not Found",
               failureType: MyAppFilures.emailOrPasswordFailure));
         }
@@ -92,7 +92,7 @@ class AccountServices implements AccountRepo {
           error: e.toString(), failureType: MyAppFilures.firebaseFailure));
     }
 
-    return const Right(MainFailures(
+    return Right(MainFailures(
         error: "Something went wrong",
         failureType: MyAppFilures.clientFailure));
   }
@@ -114,7 +114,7 @@ class AccountServices implements AccountRepo {
           error: e.toString(), failureType: MyAppFilures.firebaseFailure));
     }
 
-    return const Right(MainFailures(
+    return Right(MainFailures(
         error: "Something went wrong",
         failureType: MyAppFilures.clientFailure));
   }

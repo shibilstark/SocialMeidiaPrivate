@@ -49,3 +49,11 @@ class SearchTextControllers {
     userSearch.clear();
   }
 }
+
+class SearchInMessageTextControllers {
+  static final TextEditingController userSearch = TextEditingController();
+
+  static clearControllers() {
+    userSearch.clear();
+  }
+}

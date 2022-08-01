@@ -4,6 +4,8 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
+import 'package:social_media/domain/models/notification/notification_model.dart';
+
 class UserModel extends Equatable {
   String userId;
   String name;
@@ -17,21 +19,22 @@ class UserModel extends Equatable {
   List<String> followers;
   List<String> following;
   String? discription;
+  List<NotificationModel> notifications;
 
-  UserModel({
-    required this.userId,
-    required this.name,
-    required this.email,
-    required this.isAgreed,
-    required this.isPrivate,
-    required this.isBlocked,
-    required this.creationDate,
-    required this.followers,
-    required this.following,
-    required this.discription,
-    required this.profileImage,
-    required this.coverImage,
-  });
+  UserModel(
+      {required this.userId,
+      required this.name,
+      required this.email,
+      required this.isAgreed,
+      required this.isPrivate,
+      required this.isBlocked,
+      required this.creationDate,
+      required this.followers,
+      required this.following,
+      required this.discription,
+      required this.profileImage,
+      required this.coverImage,
+      required this.notifications});
 
   @override
   List<Object?> get props => [
@@ -46,7 +49,8 @@ class UserModel extends Equatable {
         followers,
         following,
         discription,
-        creationDate
+        creationDate,
+        notifications
       ];
 
   Map<String, dynamic> toMap() {
@@ -63,6 +67,7 @@ class UserModel extends Equatable {
       'followers': followers,
       'following': following,
       'discription': discription,
+      'notifications': notifications.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -80,10 +85,15 @@ class UserModel extends Equatable {
           DateTime.fromMillisecondsSinceEpoch(map['creationDate'] as int),
       profileImage:
           map['profileImage'] != null ? map['profileImage'] as String : null,
-      followers: List<String>.from((map['followers']) as List<dynamic>),
-      following: List<String>.from((map['following']) as List<dynamic>),
+      followers: List<String>.from((map['followers'] as List<dynamic>)),
+      following: List<String>.from((map['following'] as List<dynamic>)),
       discription:
           map['discription'] != null ? map['discription'] as String : null,
+      notifications: List<NotificationModel>.from(
+        (map['notifications'] as List<dynamic>).map<NotificationModel>(
+          (x) => NotificationModel.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
     );
   }
 
@@ -105,6 +115,7 @@ class UserModel extends Equatable {
     List<String>? followers,
     List<String>? following,
     String? discription,
+    List<NotificationModel>? notifications,
   }) {
     return UserModel(
       userId: userId ?? this.userId,
@@ -119,6 +130,7 @@ class UserModel extends Equatable {
       followers: followers ?? this.followers,
       following: following ?? this.following,
       discription: discription ?? this.discription,
+      notifications: notifications ?? this.notifications,
     );
   }
 }

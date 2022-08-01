@@ -118,9 +118,7 @@ class ProfileBody extends StatelessWidget {
                       alignment: Alignment.center,
                       child: GestureDetector(
                         onTap: () {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            context.read<ProfileBloc>().add(GetCurrentUser());
-                          });
+                          context.read<ProfileBloc>().add(GetCurrentUser());
                         },
                         child: Container(
                           decoration: BoxDecoration(

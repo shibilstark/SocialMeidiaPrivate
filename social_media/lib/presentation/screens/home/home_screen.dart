@@ -10,6 +10,7 @@ import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/presentation/screens/home/end_drawer.dart';
+import 'package:social_media/presentation/screens/message/message_screen.dart';
 import 'package:social_media/presentation/screens/posts_screen/posts_screen.dart';
 import 'package:social_media/presentation/screens/profile/profile_screen.dart';
 import 'package:social_media/presentation/screens/search_screen/search_screen.dart';
@@ -151,7 +152,7 @@ class HomeScreen extends StatelessWidget {
 final _screens = [
   const PostsScreen(),
   const SearchScreen(),
-  const Scaffold(),
+  const MessageScreen(),
   const ProfileScreen(),
 ];
 
@@ -184,9 +185,7 @@ class MainAppBar extends StatelessWidget {
                       Center(
                         child: IconButton(
                             onPressed: () {
-                              context
-                                  .read<HomeFeedBloc>()
-                                  .add(const GetHomeFeed());
+                              Navigator.of(context).pushNamed('/notifications');
                             },
                             icon: IconTheme(
                               data: Theme.of(context).primaryIconTheme,

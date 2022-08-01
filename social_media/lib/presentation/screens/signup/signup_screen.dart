@@ -134,22 +134,22 @@ class SignUpActionButtonWidget extends StatelessWidget {
                   final userId = const Uuid();
                   final currentDateTime = DateTime.now();
                   final UserModel model = UserModel(
-                    name: TextFieldAuthenticationController.signupName.text
-                        .trim()
-                        .capitalizeFirst(),
-                    email: TextFieldAuthenticationController.signupEmail.text
-                        .trim(),
-                    isAgreed: true,
-                    isPrivate: false,
-                    isBlocked: false,
-                    creationDate: currentDateTime,
-                    userId: userId.v4(),
-                    discription: profileDiscriptionAuto,
-                    followers: [],
-                    following: [],
-                    profileImage: null,
-                    coverImage: null,
-                  );
+                      name: TextFieldAuthenticationController.signupName.text
+                          .trim()
+                          .capitalizeFirst(),
+                      email: TextFieldAuthenticationController.signupEmail.text
+                          .trim(),
+                      isAgreed: true,
+                      isPrivate: false,
+                      isBlocked: false,
+                      creationDate: currentDateTime,
+                      userId: userId.v4(),
+                      discription: profileDiscriptionAuto,
+                      followers: [],
+                      following: [],
+                      profileImage: null,
+                      coverImage: null,
+                      notifications: []);
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     context.read<AuthBloc>().add(CreateAccount(
                         model: model,

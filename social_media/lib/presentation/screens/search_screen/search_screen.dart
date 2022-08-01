@@ -24,76 +24,81 @@ class SearchScreen extends StatelessWidget {
             children: [
               SearchUserTextFieldWidget(),
               Gap(H: 10.sm),
-              BlocBuilder<SearchBloc, SearchState>(
-                builder: (context, state) {
-                  if (state is SearchIdle) {
-                    return const Center(
-                      child: Text("Search Somethinhg"),
-                    );
-                  } else if (state is SearchLoading) {
-                    return const Center(
-                      child: Text("Loading"),
-                    );
-                  } else if (state is SearchSuccess) {
-                    return Expanded(
-                      child: ListView.separated(
-                          itemBuilder: (context, index) {
-                            final currentUser = state.results[index];
-                            return ListTile(
-                              onTap: () async {
-                                if (currentUser.userId != Global.USER_DATA.id) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) async {
-                                    context.read<OthersProfileBloc>().add(
-                                        GetUserWithId(
-                                            userId: currentUser.userId));
-                                    Navigator.of(context)
-                                        .pushNamed('/othersprofile');
-                                  });
-                                } else {
-                                  gotoProfile();
-                                }
-                              },
-                              dense: true,
-                              visualDensity: const VisualDensity(vertical: -2),
-                              leading: currentUser.profileImage == null
-                                  ? CircleAvatar(
-                                      radius: 18.sm,
-                                      backgroundImage: const AssetImage(
-                                          "assets/dummy/dummyDP.png"),
-                                    )
-                                  : CircleAvatar(
-                                      radius: 18.sm,
-                                      backgroundImage: NetworkImage(
-                                          currentUser.profileImage!),
-                                    ),
-                              title: Text(
-                                currentUser.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                        fontSize: 14.sm,
-                                        fontWeight: FontWeight.normal),
-                              ),
-                            );
-                          },
-                          separatorBuilder: (context, index) => Gap(H: 5.sm),
-                          // separatorBuilder: (context, index) =>
-                          //     Divider(thickness: 0.2.sm),
-                          itemCount: state.results.length),
-                    );
-                  } else {
-                    return const Center(
-                      child: Text("Error"),
-                    );
-                  }
-                },
-              ),
+              SearchResultWidget(),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class SearchResultWidget extends StatelessWidget {
+  const SearchResultWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        if (state is SearchIdle) {
+          return const Center(
+            child: Text("Search Somethinhg"),
+          );
+        } else if (state is SearchLoading) {
+          return const Center(
+            child: Text("Loading"),
+          );
+        } else if (state is SearchSuccess) {
+          return Expanded(
+            child: ListView.separated(
+                itemBuilder: (context, index) {
+                  final currentUser = state.results[index];
+                  return ListTile(
+                    onTap: () async {
+                      if (currentUser.userId != Global.USER_DATA.id) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) async {
+                          context
+                              .read<OthersProfileBloc>()
+                              .add(GetUserWithId(userId: currentUser.userId));
+                          Navigator.of(context).pushNamed('/othersprofile');
+                        });
+                      } else {
+                        gotoProfile();
+                      }
+                    },
+                    dense: true,
+                    visualDensity: const VisualDensity(vertical: -2),
+                    leading: currentUser.profileImage == null
+                        ? CircleAvatar(
+                            radius: 18.sm,
+                            backgroundImage:
+                                const AssetImage("assets/dummy/dummyDP.png"),
+                          )
+                        : CircleAvatar(
+                            radius: 18.sm,
+                            backgroundImage:
+                                NetworkImage(currentUser.profileImage!),
+                          ),
+                    title: Text(
+                      currentUser.name,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: 14.sm, fontWeight: FontWeight.normal),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => Gap(H: 5.sm),
+                // separatorBuilder: (context, index) =>
+                //     Divider(thickness: 0.2.sm),
+                itemCount: state.results.length),
+          );
+        } else {
+          return const Center(
+            child: Text("Error"),
+          );
+        }
+      },
     );
   }
 }

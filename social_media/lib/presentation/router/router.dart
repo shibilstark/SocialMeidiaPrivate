@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media/presentation/screens/home/home_screen.dart';
 import 'package:social_media/presentation/screens/login/login_screen.dart';
 import 'package:social_media/presentation/screens/new_post/new_post_screen.dart';
+import 'package:social_media/presentation/screens/notification/notification_screen.dart';
 import 'package:social_media/presentation/screens/others_profile/others_profile.dart';
 import 'package:social_media/presentation/screens/post_view/post_view.dart';
 import 'package:social_media/presentation/screens/profile/profile_screen.dart';
@@ -25,6 +26,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => NewPostScreen());
       case "/othersprofile":
         return MaterialPageRoute(builder: (_) => OthersProfileScreen());
+      case "/notifications":
+        return MaterialPageRoute(builder: (_) => NotificationScreen());
       case "/onlinevideoplayer":
         final args = routSettings.arguments as ScreenArgs;
         return MaterialPageRoute(

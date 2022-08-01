@@ -13,16 +13,16 @@
 
 import 'package:equatable/equatable.dart';
 
-enum MyAppFilures {
-  clientFailure,
-  firebaseFailure,
-  userNotFound,
-  emailOrPasswordFailure,
-  none
+class MyAppFilures {
+  static String clientFailure = clientFailure;
+  static String firebaseFailure = firebaseFailure;
+  static String userNotFound = userNotFound;
+  static String emailOrPasswordFailure = emailOrPasswordFailure;
+  static String none = none;
 }
 
 class MainFailures extends Equatable {
-  final MyAppFilures failureType;
+  final String failureType;
   final String error;
 
   const MainFailures({required this.failureType, required this.error});
@@ -65,7 +65,7 @@ class UserNotFound extends MainFailures implements Exception {
 
 class WrongEmailOrPassword extends MainFailures implements Exception {
   final String err;
-  const WrongEmailOrPassword({required this.err})
+  WrongEmailOrPassword({required this.err})
       : super(error: err, failureType: MyAppFilures.emailOrPasswordFailure);
 
   @override
